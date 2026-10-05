@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Kicau Burung - Heliks + Teori</title>
+
+  <style>
+    :root {
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+
+      --bg: #f7f6f2;
+      --fg: #1c1c1a;
+      --mut: #6b6a63;
+      --card: #fff;
+      --line: #d9d7cf;
+      --hi: #d8412f;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #141413;
+        --fg: #ecebe5;
+        --mut: #9a988f;
+        --card: #1f1f1d;
+        --line: #3a3935;
+        --hi: #ff6b57;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #141413;
+      --fg: #ecebe5;
+      --mut: #9a988f;
+      --card: #1f1f1d;
+      --line: #3a3935;
+      --hi: #ff6b57;
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 15px/1.5 system-ui, -apple-system, sans-serif;
+    }
+
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 0 0 2px;
+    }
+
+    p {
+      color: var(--mut);
+      margin: 0 0 12px;
+      font-size: 14px;
+    }
+
+    #v {
+      height: 380px;
+      background: #0c0d10;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #v canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    .lb {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      pointer-events: none;
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.3;
+      color: #e6e8ee;
+      white-space: nowrap;
+    }
+
+    .lb .tx {
+      background: rgba(12, 13, 16, 0.78);
+      border: 1px solid #3a3d46;
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
+
+    .lb .tx b {
+      display: block;
+      font-size: 12px;
+    }
+
+    .lb .ld {
+      width: 1px;
+      background: #4a4d57;
+      margin: 0 auto;
+    }
+
+    #bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 8px 12px;
+      background: rgba(12, 13, 16, 0.85);
+      border-top: 1px solid #2a2c33;
+      color: #c9ccd4;
+      font-size: 12px;
+      line-height: 1.5;
+      pointer-events: none;
+    }
+
+    #bar b {
+      color: #fff;
+    }
+
+    #bar code {
+      font-family: ui-monospace, Menlo, monospace;
+      color: #9fd3ff;
+    }
+
+    button {
+      font: inherit;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--fg);
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    button.on {
+      background: var(--hi);
+      color: #fff;
+      border-color: var(--hi);
+    }
+
+    ul {
+      color: var(--mut);
+      font-size: 13px;
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Kicau burung sebagai satu garis kontinu</h1>
+
+    <p>
+      Bunyi adalah tekanan udara terhadap waktu. Digambar sebagai heliks:
+      sumbu panjang = waktu, putaran = fase, lebar = amplitudo.
+      Teori tiap kicau muncul langsung di atas heliksnya.
+    </p>
+
+    <div id="v">
+      <div id="bar">
+        <div id="b1">
+          <b>Teori</b> · tekan "Putar kicau" untuk memulai
+        </div>
+
+        <div id="b2">
+          <code>
+            p(t) = A·sin φ(t)
+            &nbsp;·&nbsp;
+            φ(t) = 2π∫f(t)dt
+            &nbsp;·&nbsp;
+            λ = v/f
+            &nbsp;(v = 343 m/s)
+          </code>
+        </div>
+
+        <div id="b3"></div>
+      </div>
+    </div>
+
+    <button id="play">▶ Putar kicau</button>
+
+    <ul>
+      <li>
+        Garis lurus mendatar = hening. Heliks makin rapat = nada makin tinggi.
+      </li>
+
+      <li>
+        Label di atas heliks: frekuensi awal→akhir (↗ naik, ↘ turun)
+        dan panjang gelombang λ.
+      </li>
+
+      <li>
+        Gerakan diperlambat dan frekuensi visual jauh lebih rendah
+        dari aslinya agar putarannya terlihat.
+      </li>
+    </ul>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const box = $("v");
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true
+    });
+
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    box.insertBefore(renderer.domElement, box.firstChild);
+
+    const scene = new THREE.Scene();
+
+    const cam = new THREE.PerspectiveCamera(
+      45,
+      1,
+      0.1,
+      200
+    );
+
+    cam.position.set(0, 1.5, 34);
+
+    const grp = new THREE.Group();
+
+    scene.add(grp);
+    grp.rotation.set(0.2, -0.5, 0);
+
+    function size() {
+      const w = box.clientWidth;
+      const h = box.clientHeight;
+
+      renderer.setSize(w, h);
+
+      cam.aspect = w / h;
+      cam.updateProjectionMatrix();
+    }
+
+    addEventListener("resize", size);
+    size();
+
+    let lx = 0;
+    let ly = 0;
+    let dn = false;
+
+    const el = renderer.domElement;
+
+    el.addEventListener("pointerdown", e => {
+      dn = true;
+
+      lx = e.clientX;
+      ly = e.clientY;
+
+      el.setPointerCapture(e.pointerId);
+    });
+
+    el.addEventListener("pointermove", e => {
+      if (!dn) return;
+
+      grp.rotation.y += (e.clientX - lx) * 0.006;
+      grp.rotation.x += (e.clientY - ly) * 0.006;
+
+      lx = e.clientX;
+      ly = e.clientY;
+    });
+
+    el.addEventListener("pointerup", () => {
+      dn = false;
+    });
+
+    el.addEventListener("pointercancel", () => {
+      dn = false;
+    });
+
+
+    // ============================================================
+    // SUARA KICAU
+    // ============================================================
+
+    let audio;
+    let master;
+    let timer;
+    let playing = false;
+    let notes = [];
+    let nextT = 0;
+    let left = 0;
+
+    const R = Math.random;
+
+    const clamp = (v, a, b) => {
+      return Math.max(a, Math.min(b, v));
+    };
+
+    function note(t) {
+      const dur = 0.08 + R() * 0.07;
+
+      const f0 = 2200 + R() * 1800;
+
+      const f1 = clamp(
+        f0 + (R() - 0.5) * 2600,
+        1800,
+        5000
+      );
+
+      const o = audio.createOscillator();
+      const g = audio.createGain();
+
+      o.frequency.setValueAtTime(f0, t);
+
+      o.frequency.exponentialRampToValueAtTime(
+        f1,
+        t + dur
+      );
+
+      g.gain.setValueAtTime(0, t);
+
+      g.gain.linearRampToValueAtTime(
+        0.5,
+        t + dur * 0.25
+      );
+
+      g.gain.linearRampToValueAtTime(
+        0,
+        t + dur
+      );
+
+      o.connect(g).connect(master);
+
+      o.start(t);
+      o.stop(t + dur + 0.02);
+
+      notes.push({
+        t,
+        dur,
+        f0,
+        f1
+      });
+    }
+
+    function sched() {
+      const now = audio.currentTime;
+
+      while (nextT < now + 0.4) {
+        if (left === 0) {
+          left = 3 + Math.floor(R() * 2);
+
+          if (nextT < now + 0.05) {
+            nextT = now + 0.05;
+          }
+        }
+
+        note(nextT);
+
+        left--;
+
+        nextT += left
+          ? 0.32 + R() * 0.1
+          : 1.2 + R() * 0.8;
+      }
+    }
+
+    $("play").onclick = () => {
+      if (!playing) {
+        audio =
+          audio ||
+          new (
+            window.AudioContext ||
+            window.webkitAudioContext
+          )();
+
+        audio.resume();
+
+        master = audio.createGain();
+        master.gain.value = 0.25;
+
+        master.connect(audio.destination);
+
+        nextT = audio.currentTime + 0.05;
+        left = 0;
+
+        sched();
+
+        timer = setInterval(sched, 100);
+
+        playing = true;
+
+        $("play").textContent = "■ Hentikan";
+        $("play").classList.add("on");
+      } else {
+        clearInterval(timer);
+
+        master.gain.setTargetAtTime(
+          0,
+          audio.currentTime,
+          0.02
+        );
+
+        notes = [];
+        playing = false;
+
+        $("play").textContent = "▶ Putar kicau";
+        $("play").classList.remove("on");
+      }
+    };
+
+
+    // ============================================================
+    // HELIKS
+    // (y,z) = A * env * (sin fase, cos fase)
+    // x = waktu
+    // ============================================================
+
+    const N = 1600;
+    const S = 4;
+    const L = 34;
+    const A = 3.2;
+    const SLOW = 3;
+
+    const fm = f => {
+      return 6 + ((f - 1800) / 3200) * 8;
+    };
+
+    const Y = new Float32Array(N);
+    const Z = new Float32Array(N);
+
+    const BR = new Float32Array(N);
+    const BG = new Float32Array(N);
+    const BB = new Float32Array(N);
+
+    const pos = new Float32Array(N * 3);
+    const col = new Float32Array(N * 3);
+
+    const grey = [0.45, 0.47, 0.52];
+
+    BR.fill(grey[0]);
+    BG.fill(grey[1]);
+    BB.fill(grey[2]);
+
+    const geo = new THREE.BufferGeometry();
+
+    geo.setAttribute(
+      "position",
+      new THREE.BufferAttribute(pos, 3)
+    );
+
+    geo.setAttribute(
+      "color",
+      new THREE.BufferAttribute(col, 3)
+    );
+
+    const mat = new THREE.LineBasicMaterial({
+      vertexColors: true
+    });
+
+    [[0, 0, 0], [0, 0.06, 0.06], [0, -0.06, 0]].forEach(o => {
+      const l = new THREE.Line(geo, mat);
+
+      l.position.set(...o);
+      l.frustumCulled = false;
+
+      grp.add(l);
+    });
+
+    grp.add(
+      new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(-L / 2, 0, 0),
+          new THREE.Vector3(L / 2, 0, 0)
+        ]),
+        new THREE.LineBasicMaterial({
+          color: 0x3a3d46
+        })
+      )
+    );
+
+    function rebuild() {
+      for (let i = 0; i < N; i++) {
+        pos[i * 3] =
+          (i / (N - 1) - 0.5) * L;
+
+        pos[i * 3 + 1] = Y[i];
+        pos[i * 3 + 2] = Z[i];
+
+        const f =
+          0.25 +
+          0.75 *
+          Math.pow(i / N, 0.7);
+
+        col[i * 3] = BR[i] * f;
+        col[i * 3 + 1] = BG[i] * f;
+        col[i * 3 + 2] = BB[i] * f;
+      }
+
+      geo.attributes.position.needsUpdate = true;
+      geo.attributes.color.needsUpdate = true;
+    }
+
+    rebuild();
+
+
+    // ============================================================
+    // TEORI DI DALAM VISUAL
+    // ============================================================
+
+    const NN = [
+      "C", "C#", "D", "D#", "E", "F",
+      "F#", "G", "G#", "A", "A#", "B"
+    ];
+
+    const V = 343;
+
+    const nm = f => {
+      const m =
+        Math.round(
+          69 + 12 * Math.log2(f / 440)
+        );
+
+      return (
+        NN[((m % 12) + 12) % 12] +
+        (Math.floor(m / 12) - 1)
+      );
+    };
+
+    const kh = f => {
+      return (f / 1000).toFixed(2);
+    };
+
+    const lam = f => {
+      return (V / f * 100).toFixed(1);
+    };
+
+    const per = f => {
+      return (1000 / f).toFixed(2);
+    };
+
+    let cnt = 0;
+    let labels = [];
+
+    function showTheory(n) {
+      cnt++;
+
+      const up = n.f1 > n.f0;
+      const {
+        f0,
+        f1,
+        dur
+      } = n;
+
+      const row = cnt % 3;
+
+      const cyc =
+        Math.abs(f1 - f0) < 1
+          ? dur * f0
+          : dur *
+            (f1 - f0) /
+            Math.log(f1 / f0);
+
+      const d = document.createElement("div");
+
+      d.className = "lb";
+
+      d.innerHTML = `
+        <div class="tx">
+          <b>
+            ${up ? "↗ " : "↘ "}
+            ${kh(f0)}→${kh(f1)} kHz
+          </b>
+
+          λ ${lam(f0)}→${lam(f1)} cm
+        </div>
+
+        <div
+          class="ld"
+          style="height:${10 + (2 - row) * 40}px"
+        ></div>
+      `;
+
+      box.appendChild(d);
+
+      labels.push({
+        d,
+        idx: N - 1
+      });
+
+      $("b1").innerHTML = `
+        <b>
+          Kicau #${cnt} ·
+          nada ${up ? "naik ↗" : "turun ↘"}
+        </b>
+        · ${nm(f0)} → ${nm(f1)}
+        · periode ${per(f0)} → ${per(f1)} ms
+        · ${(dur * 1000).toFixed(0)} ms
+        · ±${cyc.toFixed(0)} getaran
+      `;
+
+      $("b3").textContent = up
+        ? "Frekuensi naik → periode memendek, λ mengecil → heliks makin rapat."
+        : "Frekuensi turun → periode memanjang, λ membesar → heliks makin renggang.";
+    }
+
+
+    // ============================================================
+    // ANIMASI
+    // ============================================================
+
+    let hue = 0.58;
+    let last = performance.now();
+
+    const tmp = new THREE.Color();
+    const vv = new THREE.Vector3();
+
+    function frame(ms) {
+      const dt = clamp(
+        (ms - last) / 1000,
+        0.005,
+        0.05
+      );
+
+      last = ms;
+
+      if (playing) {
+        const now = audio.currentTime;
+
+        for (const n of notes) {
+          if (
+            !n.shown &&
+            now >= n.t + n.dur * SLOW / 2
+          ) {
+            n.shown = true;
+            showTheory(n);
+          }
+        }
+
+        notes = notes.filter(
+          n =>
+            now - n.t <
+            n.dur * SLOW + 0.1
+        );
+
+        Y.copyWithin(0, S);
+        Z.copyWithin(0, S);
+
+        BR.copyWithin(0, S);
+        BG.copyWithin(0, S);
+        BB.copyWithin(0, S);
+
+        for (let k = 0; k < S; k++) {
+          const tt =
+            now -
+            ((S - 1 - k) / S) * dt;
+
+          let y = 0;
+          let z = 0;
+          let amp = 0;
+
+          for (const n of notes) {
+            const vd = n.dur * SLOW;
+            const tau = tt - n.t;
+
+            if (tau < 0 || tau >= vd) {
+              continue;
+            }
+
+            const p = tau / vd;
+
+            const a = fm(n.f0);
+            const b = fm(n.f1);
+
+            const ph =
+              2 *
+              Math.PI *
+              vd *
+              (
+                a * p +
+                (b - a) * p * p / 2
+              );
+
+            const env =
+              Math.pow(
+                Math.sin(Math.PI * p),
+                0.7
+              );
+
+            y +=
+              A *
+              env *
+              Math.sin(ph);
+
+            z +=
+              A *
+              env *
+              Math.cos(ph);
+
+            amp = Math.max(amp, env);
+
+            const f =
+              n.f0 *
+              Math.pow(
+                n.f1 / n.f0,
+                p
+              );
+
+            hue =
+              0.58 -
+              clamp(
+                (f - 1800) / 3200,
+                0,
+                1
+              ) *
+              0.58;
+          }
+
+          const i = N - S + k;
+
+          Y[i] = y;
+          Z[i] = z;
+
+          tmp.setHSL(
+            hue,
+            0.9,
+            0.62
+          );
+
+          const e =
+            Math.min(1, amp * 1.5);
+
+          BR[i] =
+            grey[0] +
+            (tmp.r - grey[0]) * e;
+
+          BG[i] =
+            grey[1] +
+            (tmp.g - grey[1]) * e;
+
+          BB[i] =
+            grey[2] +
+            (tmp.b - grey[2]) * e;
+        }
+
+        rebuild();
+
+        labels.forEach(l => {
+          l.idx -= S;
+        });
+      }
+
+
+      // ==========================================================
+      // LETAKKAN LABEL DI ATAS HELIKS
+      // PROYEKSI 3D → LAYAR
+      // ==========================================================
+
+      grp.updateMatrixWorld();
+
+      const w = box.clientWidth;
+      const h = box.clientHeight;
+
+      labels = labels.filter(l => {
+        if (l.idx < N * 0.06) {
+          l.d.remove();
+          return false;
+        }
+
+        vv.set(
+          (l.idx / (N - 1) - 0.5) * L,
+          A + 0.4,
+          0
+        );
+
+        vv
+          .applyMatrix4(grp.matrixWorld)
+          .project(cam);
+
+        l.d.style.left =
+          ((vv.x * 0.5 + 0.5) * w) + "px";
+
+        l.d.style.top =
+          ((-vv.y * 0.5 + 0.5) * h) + "px";
+
+        l.d.style.opacity =
+          clamp(
+            l.idx / (N * 0.3),
+            0,
+            1
+          );
+
+        return true;
+      });
+
+      renderer.render(scene, cam);
+
+      requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>
