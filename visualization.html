@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Kicau Burung - Satu Garis Tak Putus</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <title>Kicau Burung - Analisis MP3 3D</title>
 
     <style>
         :root {
             box-sizing: border-box;
-            padding-top: env(safe-area-inset-top, 0px);
-            padding-bottom: env(safe-area-inset-bottom, 0px);
 
             --bg: #f7f6f2;
             --fg: #1c1c1a;
             --mut: #6b6a63;
-            --card: #fff;
+            --card: #ffffff;
             --line: #d9d7cf;
             --hi: #d8412f;
         }
@@ -39,6 +40,10 @@
             --card: #1f1f1d;
             --line: #3a3935;
             --hi: #ff6b57;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         html {
@@ -70,7 +75,7 @@
         }
 
         #v {
-            height: 380px;
+            height: 430px;
             background: #0c0d10;
             border-radius: 12px;
             overflow: hidden;
@@ -84,47 +89,140 @@
             touch-action: none;
         }
 
-        .lb {
+        /* =====================================================
+           INFO KECIL
+        ===================================================== */
+
+        .info {
             position: absolute;
-            transform: translate(-50%, -100%);
-            pointer-events: none;
-            text-align: center;
+            left: 14px;
+            top: 14px;
+
+            padding: 7px 10px;
+
+            background: rgba(12, 13, 16, 0.72);
+            border: 1px solid #353841;
+            border-radius: 7px;
+
+            color: #dfe2e8;
+
             font-size: 11px;
-            line-height: 1.3;
-            color: #e6e8ee;
-            white-space: nowrap;
+
+            pointer-events: none;
+
+            z-index: 5;
         }
 
-        .lb .tx {
-            background: rgba(12, 13, 16, 0.78);
-            border: 1px solid #3a3d46;
-            border-radius: 6px;
-            padding: 2px 6px;
+        /* =====================================================
+           PANEL TEORI REALTIME
+        ===================================================== */
+
+        #theory {
+            position: absolute;
+
+            right: 14px;
+            top: 14px;
+
+            width: 220px;
+
+            padding: 12px 13px;
+
+            background: rgba(12, 13, 16, 0.84);
+            border: 1px solid #353841;
+
+            border-radius: 9px;
+
+            color: #dfe2e8;
+
+            pointer-events: none;
+
+            z-index: 6;
+
+            backdrop-filter: blur(8px);
         }
 
-        .lb .tx b {
-            display: block;
-            font-size: 12px;
+        #theory-title {
+            color: #ffffff;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            letter-spacing: 0.12em;
+
+            margin-bottom: 9px;
+
+            opacity: 0.75;
         }
 
-        .lb .ld {
-            width: 1px;
-            background: #4a4d57;
-            margin: 0 auto;
+        .theory-row {
+            margin-bottom: 8px;
         }
+
+        .theory-label {
+            color: #8f949e;
+            font-size: 10px;
+            margin-bottom: 1px;
+        }
+
+        .theory-value {
+            color: #ffffff;
+
+            font-family:
+                ui-monospace,
+                SFMono-Regular,
+                Menlo,
+                Consolas,
+                monospace;
+
+            font-size: 13px;
+
+            line-height: 1.35;
+        }
+
+        .theory-explain {
+            color: #9fd3ff;
+
+            font-size: 10px;
+
+            margin-top: 2px;
+        }
+
+        #theory-status {
+            border-top: 1px solid #30323a;
+
+            margin-top: 9px;
+            padding-top: 8px;
+
+            color: #c7cad1;
+
+            font-size: 10px;
+            line-height: 1.45;
+        }
+
+        /* =====================================================
+           BAR BAWAH
+        ===================================================== */
 
         #bar {
             position: absolute;
+
             left: 0;
             right: 0;
             bottom: 0;
+
             padding: 8px 12px;
-            background: rgba(12, 13, 16, 0.85);
+
+            background: rgba(12, 13, 16, 0.88);
             border-top: 1px solid #2a2c33;
+
             color: #c9ccd4;
+
             font-size: 12px;
             line-height: 1.5;
+
             pointer-events: none;
+
+            z-index: 5;
         }
 
         #bar b {
@@ -136,15 +234,24 @@
             color: #9fd3ff;
         }
 
+        /* =====================================================
+           TOMBOL
+        ===================================================== */
+
         button {
             font: inherit;
             font-weight: 600;
+
             padding: 10px 16px;
+
             border-radius: 8px;
             border: 1px solid var(--line);
+
             background: var(--card);
             color: var(--fg);
+
             cursor: pointer;
+
             margin-top: 12px;
         }
 
@@ -154,1244 +261,1397 @@
             border-color: var(--hi);
         }
 
+        input[type="range"] {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        /* =====================================================
+           KETERANGAN
+        ===================================================== */
+
         ul {
             color: var(--mut);
             font-size: 13px;
+
             margin: 12px 0 0;
             padding-left: 18px;
+        }
+
+        @media (max-width: 650px) {
+
+            #v {
+                height: 470px;
+            }
+
+            #theory {
+                width: 190px;
+
+                right: 10px;
+                top: 10px;
+
+                padding: 10px;
+            }
+
+            .theory-value {
+                font-size: 11px;
+            }
+
+            .theory-explain {
+                font-size: 9px;
+            }
+
+            .info {
+                left: 10px;
+                top: 10px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <main>
+<main>
 
-        <h1>Satu garis tak putus, satu ruas per bunyi</h1>
+    <h1>Satu garis tak putus dari kicau burung</h1>
 
-        <p>
-            Waktu berjalan ke kanan sebagai satu garis kontinu.
-            Saat hening garis abu-abu lurus mendatar.
-            Saat ada kicau, garis berwarna berbelok lurus ke arah
-            3D tertentu, lalu lanjut lurus dari ujungnya.
-        </p>
+    <p>
+        MP3 burung dianalisis secara langsung.
+        Frekuensi suara menentukan arah garis pada ruang 3D.
+    </p>
 
-        <div id="v">
+    <div id="v">
 
-            <div id="bar">
+        <div class="info">
+            MP3 → FFT → Frekuensi → Garis 3D
+        </div>
 
-                <div id="b1">
-                    <b>Teori</b> · tekan "Putar kicau" untuk memulai
+
+        <!-- =================================================
+             TEORI REALTIME
+        ================================================== -->
+
+        <div id="theory">
+
+            <div id="theory-title">
+                ANALISIS TEORI REALTIME
+            </div>
+
+            <div class="theory-row">
+
+                <div class="theory-label">
+                    FREKUENSI
                 </div>
 
-                <div id="b2">
-                    <code>
-                        belok atas/bawah = f akhir − f awal
-                        &nbsp;·&nbsp;
-                        belok depan/belakang = f awal
-                        &nbsp;·&nbsp;
-                        λ = v/f
-                        &nbsp;(v = 343 m/s)
-                    </code>
+                <div
+                    id="theory-frequency"
+                    class="theory-value"
+                >
+                    f = — Hz
                 </div>
 
-                <div id="b3"></div>
+                <div
+                    id="theory-period"
+                    class="theory-explain"
+                >
+                    T = 1 / f
+                </div>
 
+            </div>
+
+
+            <div class="theory-row">
+
+                <div class="theory-label">
+                    PANJANG GELOMBANG
+                </div>
+
+                <div
+                    id="theory-wavelength"
+                    class="theory-value"
+                >
+                    λ = — m
+                </div>
+
+                <div class="theory-explain">
+                    λ = v / f
+                </div>
+
+            </div>
+
+
+            <div class="theory-row">
+
+                <div class="theory-label">
+                    PERUBAHAN FREKUENSI
+                </div>
+
+                <div
+                    id="theory-difference"
+                    class="theory-value"
+                >
+                    Δf = — Hz
+                </div>
+
+                <div
+                    id="theory-direction"
+                    class="theory-explain"
+                >
+                    Belum ada perubahan
+                </div>
+
+            </div>
+
+
+            <div class="theory-row">
+
+                <div class="theory-label">
+                    FREKUENSI SUDUT
+                </div>
+
+                <div
+                    id="theory-angular"
+                    class="theory-value"
+                >
+                    ω = — rad/s
+                </div>
+
+                <div class="theory-explain">
+                    ω = 2πf
+                </div>
+
+            </div>
+
+
+            <div id="theory-status">
+                Belum ada audio yang dianalisis.
             </div>
 
         </div>
 
-        <button id="play">
-            ▶ Putar kicau
-        </button>
 
-        <ul>
-            <li>
-                Nada naik (↗) mengarahkan garis ke atas,
-                nada turun (↘) ke bawah.
-            </li>
+        <!-- =================================================
+             BAR INFORMASI
+        ================================================== -->
 
-            <li>
-                Nada awal tinggi mengarahkan ke depan,
-                nada awal rendah ke belakang.
-                Warna: merah = tinggi, biru = rendah.
-            </li>
+        <div id="bar">
 
-            <li>
-                Pandangan mengikuti titik ujung garis terakhir.
-                Geser layar untuk memutar sudut pandang 3D.
-                Gerakan diperlambat agar mudah dilihat.
-            </li>
-        </ul>
+            <div id="b1">
+                <b>Burung</b> · tekan "Putar burung"
+            </div>
 
-    </main>
+            <div id="b2">
+                <code>
+                    f = frekuensi dominan
+                    · λ = 343 / f
+                </code>
+            </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+            <div id="b3">
+                Belum ada audio.
+            </div>
 
-    <script>
-        // =========================================================
-        // ELEMENT
-        // =========================================================
+        </div>
 
-        const $ = id => document.getElementById(id);
-        const box = $('v');
+    </div>
 
 
-        // =========================================================
-        // THREE.JS
-        // =========================================================
+    <button id="play">
+        ▶ Putar burung
+    </button>
 
-        const renderer = new THREE.WebGLRenderer({
-            antialias: true
-        });
 
-        renderer.setPixelRatio(
-            Math.min(devicePixelRatio || 1, 2)
+    <input
+        id="volume"
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        value="0.8"
+    >
+
+
+    <ul>
+
+        <li>
+            MP3 asli digunakan sebagai sumber suara.
+        </li>
+
+        <li>
+            Frekuensi tinggi mengarahkan garis
+            ke depan dan memberikan warna lebih merah.
+        </li>
+
+        <li>
+            Perubahan frekuensi membuat garis
+            membelok ke berbagai arah.
+        </li>
+
+        <li>
+            Nilai teori diperbarui secara realtime
+            berdasarkan frekuensi MP3.
+        </li>
+
+        <li>
+            Geser layar untuk memutar pandangan 3D.
+        </li>
+
+    </ul>
+
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+
+<script>
+const $ = id => document.getElementById(id);
+
+const box = $("v");
+
+
+/* =========================================================
+   THREE.JS
+========================================================= */
+
+const renderer =
+    new THREE.WebGLRenderer({
+        antialias: true
+    });
+
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio || 1,
+        2
+    )
+);
+
+box.insertBefore(
+    renderer.domElement,
+    box.firstChild
+);
+
+
+const scene =
+    new THREE.Scene();
+
+
+const camera =
+    new THREE.PerspectiveCamera(
+        45,
+        1,
+        0.1,
+        200
+    );
+
+camera.position.set(
+    0,
+    1.5,
+    34
+);
+
+
+const group =
+    new THREE.Group();
+
+scene.add(group);
+
+
+group.rotation.set(
+    0.2,
+    -0.5,
+    0
+);
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+function resize() {
+
+    const w =
+        box.clientWidth;
+
+    const h =
+        box.clientHeight;
+
+
+    renderer.setSize(
+        w,
+        h
+    );
+
+
+    camera.aspect =
+        w / h;
+
+    camera.updateProjectionMatrix();
+}
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+resize();
+
+
+/* =========================================================
+   CAMERA CONTROL
+========================================================= */
+
+let dragging = false;
+
+let lastX = 0;
+let lastY = 0;
+
+const canvas =
+    renderer.domElement;
+
+
+canvas.addEventListener(
+    "pointerdown",
+    e => {
+
+        dragging = true;
+
+        lastX = e.clientX;
+        lastY = e.clientY;
+
+        canvas.setPointerCapture(
+            e.pointerId
         );
-
-        box.insertBefore(
-            renderer.domElement,
-            box.firstChild
-        );
-
-        const scene = new THREE.Scene();
-
-        const cam = new THREE.PerspectiveCamera(
-            45,
-            1,
-            0.1,
-            200
-        );
-
-        cam.position.set(0, 1.5, 34);
-
-        const grp = new THREE.Group();
-
-        scene.add(grp);
-
-        grp.rotation.set(
-            0.2,
-            -0.5,
-            0
-        );
+    }
+);
 
 
-        // =========================================================
-        // RESIZE
-        // =========================================================
+canvas.addEventListener(
+    "pointermove",
+    e => {
 
-        function size() {
-            const w = box.clientWidth;
-            const h = box.clientHeight;
-
-            renderer.setSize(w, h);
-
-            cam.aspect = w / h;
-            cam.updateProjectionMatrix();
-        }
-
-        addEventListener('resize', size);
-
-        size();
+        if (!dragging) return;
 
 
-        // =========================================================
-        // CAMERA / TOUCH CONTROL
-        // =========================================================
-
-        let lx = 0;
-        let ly = 0;
-        let dn = false;
-
-        const el = renderer.domElement;
-
-        el.addEventListener('pointerdown', e => {
-            dn = true;
-
-            lx = e.clientX;
-            ly = e.clientY;
-
-            el.setPointerCapture(e.pointerId);
-        });
-
-        el.addEventListener('pointermove', e => {
-            if (!dn) {
-                return;
-            }
-
-            grp.rotation.y += (
-                e.clientX - lx
+        group.rotation.y +=
+            (
+                e.clientX -
+                lastX
             ) * 0.006;
 
-            grp.rotation.x += (
-                e.clientY - ly
+
+        group.rotation.x +=
+            (
+                e.clientY -
+                lastY
             ) * 0.006;
 
-            lx = e.clientX;
-            ly = e.clientY;
-        });
 
-        el.addEventListener('pointerup', () => {
-            dn = false;
-        });
-
-        el.addEventListener('pointercancel', () => {
-            dn = false;
-        });
+        lastX = e.clientX;
+        lastY = e.clientY;
+    }
+);
 
 
-        // =========================================================
-        // KONFIGURASI VISUAL
-        // =========================================================
+canvas.addEventListener(
+    "pointerup",
+    () => {
 
-        const R = Math.random;
+        dragging = false;
 
-        const clamp = (v, a, b) => {
-            return Math.max(
-                a,
-                Math.min(b, v)
-            );
-        };
-
-        const L = 34;
-        const A = 2.6;
-        const SLOW = 2;
-        const WIN = 6;
-
-        // WIN = detik yang terlihat di layar
-
-        const FW = L * 0.35;
-
-        // Lebar zona pudar di sisi kiri
-
-        const fd = x => {
-            const u = clamp(
-                (x + L / 2) / FW,
-                0,
-                1
-            );
-
-            return u * u * (3 - 2 * u);
-        };
-
-        // 0 di tepi kiri -> 1 (smoothstep)
-
-        let T0 = 0;
-
-        const xs = t => {
-            return L / 2 - (
-                (audio.currentTime - t) * L / WIN
-            );
-        };
-
-        const G = [
-            0.45,
-            0.47,
-            0.52
-        ];
-
-        const tmp = new THREE.Color();
-
-        const hc = f => {
-            tmp.setHSL(
-                0.6 -
-                clamp(
-                    (f - 1800) / 3200,
-                    0,
-                    1
-                ) * 0.6,
-                0.9,
-                0.62
-            );
-
-            return [
-                tmp.r,
-                tmp.g,
-                tmp.b
-            ];
-        };
+    }
+);
 
 
-        // =========================================================
-        // SUARA KICAU
-        // =========================================================
+canvas.addEventListener(
+    "pointercancel",
+    () => {
 
-        let audio;
-        let master;
-        let timer;
-        let playing = false;
+        dragging = false;
 
-        let notes = [];
-        let labels = [];
-        let pts = [];
-
-        let Yc = 0;
-        let Zc = 0;
-
-        let nextT = 0;
-        let left = 0;
-        let cnt = 0;
+    }
+);
 
 
-        // =========================================================
-        // MEMBUAT SATU NADA
-        // =========================================================
+/* =========================================================
+   AUDIO
+========================================================= */
 
-        function note(t) {
+let audioContext = null;
 
-            const dur = 0.08 + R() * 0.07;
+let audio = null;
 
-            const f0 = 2200 + R() * 1800;
+let source = null;
 
-            const f1 = clamp(
-                f0 + (R() - 0.5) * 2600,
-                1800,
-                5000
-            );
+let analyser = null;
 
-            const o = audio.createOscillator();
-            const g = audio.createGain();
+let playing = false;
 
 
-            o.frequency.setValueAtTime(
-                f0,
-                t
-            );
+const FFT_SIZE = 2048;
 
-            o.frequency.exponentialRampToValueAtTime(
-                f1,
-                t + dur
+
+/* =========================================================
+   INITIALIZE AUDIO
+========================================================= */
+
+function initAudio() {
+
+    if (audioContext) return;
+
+
+    audioContext =
+        new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
+
+
+    audio =
+        new Audio(
+            "./audio/burung.mp3"
+        );
+
+
+    audio.preload =
+        "auto";
+
+
+    audio.volume =
+        Number(
+            $("volume").value
+        );
+
+
+    source =
+        audioContext.createMediaElementSource(
+            audio
+        );
+
+
+    analyser =
+        audioContext.createAnalyser();
+
+
+    analyser.fftSize =
+        FFT_SIZE;
+
+
+    analyser.smoothingTimeConstant =
+        0.55;
+
+
+    source.connect(
+        analyser
+    );
+
+
+    analyser.connect(
+        audioContext.destination
+    );
+
+
+    audio.addEventListener(
+        "ended",
+        () => {
+
+            playing = false;
+
+
+            $("play").textContent =
+                "▶ Putar burung";
+
+
+            $("play").classList.remove(
+                "on"
             );
 
 
-            g.gain.setValueAtTime(
-                0,
-                t
-            );
-
-            g.gain.linearRampToValueAtTime(
-                0.5,
-                t + dur * 0.25
-            );
-
-            g.gain.linearRampToValueAtTime(
-                0,
-                t + dur
-            );
+            $("b1").innerHTML =
+                "<b>Selesai</b> · audio burung selesai";
 
 
-            o.connect(g).connect(master);
-
-            o.start(t);
-
-            o.stop(
-                t + dur + 0.02
-            );
+            $("b3").textContent =
+                "Tekan tombol untuk memutar lagi.";
 
 
-            notes.push({
-                t,
-                dur,
-                vd: dur * SLOW,
-                f0,
-                f1,
+            $("theory-status").textContent =
+                "Analisis selesai.";
 
-                dy:
-                    (f1 - f0) /
-                    1300 *
-                    A,
+        }
+    );
+}
 
-                dz:
-                    (f0 - 3200) /
-                    1000 *
-                    A,
 
-                c0: hc(f0),
-                c1: hc(f1)
-            });
+/* =========================================================
+   VOLUME
+========================================================= */
+
+$("volume").addEventListener(
+    "input",
+    () => {
+
+        if (audio) {
+
+            audio.volume =
+                Number(
+                    $("volume").value
+                );
+
         }
 
+    }
+);
 
-        // =========================================================
-        // PENJADWALAN KICAU
-        // =========================================================
 
-        function sched() {
+/* =========================================================
+   PLAY BUTTON
+========================================================= */
 
-            const now = audio.currentTime;
+$("play").addEventListener(
+    "click",
+    async () => {
 
-            while (nextT < now + 0.4) {
+        try {
 
-                if (left === 0) {
+            initAudio();
 
-                    left =
-                        3 +
-                        Math.floor(R() * 2);
 
-                    if (nextT < now + 0.05) {
-                        nextT = now + 0.05;
-                    }
-                }
+            if (
+                audioContext.state ===
+                "suspended"
+            ) {
 
-                note(nextT);
+                await audioContext.resume();
 
-                left--;
-
-                nextT += left
-                    ? 0.32 + R() * 0.1
-                    : 1.2 + R() * 0.8;
             }
-        }
 
-
-        // =========================================================
-        // CLEAR VISUAL
-        // =========================================================
-
-        function clearAll() {
-
-            notes = [];
-
-            pts = [];
-
-            labels.forEach(l => {
-                l.d.remove();
-            });
-
-            labels = [];
-
-            geo.setDrawRange(
-                0,
-                0
-            );
-        }
-
-
-        // =========================================================
-        // PLAY / STOP
-        // =========================================================
-
-        $('play').onclick = () => {
 
             if (!playing) {
 
-                audio =
-                    audio ||
-                    new (
-                        window.AudioContext ||
-                        window.webkitAudioContext
-                    )();
-
-                audio.resume();
+                audio.currentTime = 0;
 
 
-                master =
-                    audio.createGain();
-
-                master.gain.value = 0.25;
-
-                master.connect(
-                    audio.destination
-                );
-
-
-                Yc = 0;
-                Zc = 0;
-
-                T0 =
-                    audio.currentTime -
-                    WIN -
-                    1;
-
-
-                nextT =
-                    audio.currentTime +
-                    0.05;
-
-                left = 0;
-
-
-                sched();
-
-                timer = setInterval(
-                    sched,
-                    100
-                );
+                await audio.play();
 
 
                 playing = true;
 
-                $('play').textContent =
-                    '■ Hentikan';
 
-                $('play').classList.add(
-                    'on'
+                $("play").textContent =
+                    "■ Hentikan";
+
+
+                $("play").classList.add(
+                    "on"
                 );
 
-            } else {
 
-                clearInterval(timer);
+                $("b1").innerHTML =
+                    "<b>Kicau burung sedang dianalisis</b>";
 
-                master.gain.setTargetAtTime(
-                    0,
-                    audio.currentTime,
-                    0.02
-                );
 
-                clearAll();
+                $("b3").textContent =
+                    "Menganalisis frekuensi...";
 
+            }
+
+            else {
+
+                audio.pause();
+
+                audio.currentTime = 0;
 
                 playing = false;
 
-                $('play').textContent =
-                    '▶ Putar kicau';
 
-                $('play').classList.remove(
-                    'on'
+                $("play").textContent =
+                    "▶ Putar burung";
+
+
+                $("play").classList.remove(
+                    "on"
                 );
+
+
+                $("b1").innerHTML =
+                    "<b>Burung</b> · tekan \"Putar burung\"";
+
+
+                $("b3").textContent =
+                    "Audio dihentikan.";
+
             }
-        };
 
+        }
 
-        // =========================================================
-        // SATU GARIS KONTINU
-        // =========================================================
+        catch (error) {
 
-        const MAXV = 1600;
-
-        const pos =
-            new Float32Array(
-                MAXV * 3
-            );
-
-        const col =
-            new Float32Array(
-                MAXV * 3
+            console.error(
+                "Audio error:",
+                error
             );
 
 
-        const geo =
-            new THREE.BufferGeometry();
+            $("b1").innerHTML =
+                "<b>Gagal memutar burung</b>";
 
 
-        geo.setAttribute(
-            'position',
-            new THREE.BufferAttribute(
-                pos,
-                3
+            $("b3").textContent =
+                error.message;
+
+
+            $("theory-status").textContent =
+                "Audio gagal diputar.";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FFT DATA
+========================================================= */
+
+const frequencyData =
+    new Uint8Array(
+        FFT_SIZE / 2
+    );
+
+
+/* =========================================================
+   GET DOMINANT FREQUENCY
+========================================================= */
+
+function getFrequency() {
+
+    if (!analyser) {
+        return 0;
+    }
+
+
+    analyser.getByteFrequencyData(
+        frequencyData
+    );
+
+
+    const sampleRate =
+        audioContext.sampleRate;
+
+
+    const nyquist =
+        sampleRate / 2;
+
+
+    /*
+     * Rentang utama kicau burung.
+     */
+
+    const minHz =
+        1000;
+
+    const maxHz =
+        10000;
+
+
+    const minIndex =
+        Math.floor(
+            minHz /
+            nyquist *
+            frequencyData.length
+        );
+
+
+    const maxIndex =
+        Math.min(
+            frequencyData.length - 1,
+
+            Math.floor(
+                maxHz /
+                nyquist *
+                frequencyData.length
             )
         );
 
-        geo.setAttribute(
-            'color',
-            new THREE.BufferAttribute(
-                col,
-                3
-            )
-        );
+
+    let strongest = 0;
+
+    let strongestIndex = 0;
 
 
-        geo.setDrawRange(
+    for (
+        let i = minIndex;
+        i <= maxIndex;
+        i++
+    ) {
+
+        if (
+            frequencyData[i] >
+            strongest
+        ) {
+
+            strongest =
+                frequencyData[i];
+
+            strongestIndex =
+                i;
+
+        }
+
+    }
+
+
+    if (strongest < 15) {
+
+        return 0;
+
+    }
+
+
+    return (
+        strongestIndex *
+        nyquist /
+        frequencyData.length
+    );
+}
+
+
+/* =========================================================
+   FREQUENCY SMOOTHING
+========================================================= */
+
+let smoothFreq = 0;
+
+let previousFreq = 0;
+
+
+function smoothFrequency(freq) {
+
+    if (freq <= 0) {
+
+        return smoothFreq;
+
+    }
+
+
+    if (smoothFreq === 0) {
+
+        smoothFreq =
+            freq;
+
+        previousFreq =
+            freq;
+
+        return freq;
+
+    }
+
+
+    smoothFreq +=
+        (
+            freq -
+            smoothFreq
+        ) *
+        0.18;
+
+
+    return smoothFreq;
+}
+
+
+/* =========================================================
+   FREQUENCY COLOR
+========================================================= */
+
+const tempColor =
+    new THREE.Color();
+
+
+function getColor(freq) {
+
+    const t =
+        Math.max(
             0,
-            0
+            Math.min(
+                1,
+                (
+                    freq -
+                    1500
+                ) /
+                8500
+            )
         );
 
 
-        const mat =
-            new THREE.LineBasicMaterial({
-                vertexColors: true
-            });
+    tempColor.setHSL(
+        0.62 -
+        t * 0.62,
 
+        0.9,
 
-        [
-            [0, 0, 0],
-            [0, 0.07, 0.07],
-            [0, -0.07, 0],
-            [0, 0, -0.07]
-        ].forEach(o => {
+        0.58
+    );
 
-            const l =
-                new THREE.LineSegments(
-                    geo,
-                    mat
-                );
 
-            l.position.set(
-                ...o
-            );
+    return [
+        tempColor.r,
+        tempColor.g,
+        tempColor.b
+    ];
+}
 
-            l.frustumCulled = false;
 
-            grp.add(l);
-        });
+/* =========================================================
+   LINE
+========================================================= */
 
+const MAX_POINTS =
+    4000;
 
-        // =========================================================
-        // TEORI DI DALAM VISUAL
-        // =========================================================
 
-        const NN = [
-            'C',
-            'C#',
-            'D',
-            'D#',
-            'E',
-            'F',
-            'F#',
-            'G',
-            'G#',
-            'A',
-            'A#',
-            'B'
-        ];
+const positions =
+    new Float32Array(
+        MAX_POINTS * 3
+    );
 
-        const V = 343;
 
+const colors =
+    new Float32Array(
+        MAX_POINTS * 3
+    );
 
-        const nm = f => {
 
-            const m =
-                Math.round(
-                    69 +
-                    12 *
-                    Math.log2(f / 440)
-                );
+const geometry =
+    new THREE.BufferGeometry();
 
-            return (
-                NN[
-                    ((m % 12) + 12) % 12
-                ] +
-                (
-                    Math.floor(m / 12) - 1
-                )
-            );
-        };
 
+geometry.setAttribute(
+    "position",
 
-        const kh = f => {
-            return (
-                f / 1000
-            ).toFixed(2);
-        };
+    new THREE.BufferAttribute(
+        positions,
+        3
+    )
+);
 
-
-        const lam = f => {
-            return (
-                V / f * 100
-            ).toFixed(1);
-        };
-
-
-        const per = f => {
-            return (
-                1000 / f
-            ).toFixed(2);
-        };
-
-
-        // =========================================================
-        // LABEL TEORI
-        // =========================================================
-
-        function showTheory(n) {
-
-            cnt++;
-
-
-            const up =
-                n.f1 > n.f0;
-
-
-            const {
-                f0,
-                f1,
-                dur
-            } = n;
-
-
-            const row =
-                cnt % 3;
-
-
-            const cyc =
-                Math.abs(f1 - f0) < 1
-                    ? dur * f0
-                    : dur *
-                      (f1 - f0) /
-                      Math.log(f1 / f0);
-
-
-            const d =
-                document.createElement(
-                    'div'
-                );
 
+geometry.setAttribute(
+    "color",
 
-            d.className = 'lb';
+    new THREE.BufferAttribute(
+        colors,
+        3
+    )
+);
 
 
-            d.innerHTML =
-                '<div class="tx">' +
-                    '<b>' +
-                        (up ? '↗ ' : '↘ ') +
-                        kh(f0) +
-                        '→' +
-                        kh(f1) +
-                        ' kHz' +
-                    '</b>' +
-                    'λ ' +
-                    lam(f0) +
-                    '→' +
-                    lam(f1) +
-                    ' cm' +
-                '</div>' +
+geometry.setDrawRange(
+    0,
+    0
+);
 
-                '<div class="ld" ' +
-                    'style="height:' +
-                    (
-                        8 +
-                        (2 - row) * 22
-                    ) +
-                    'px">' +
-                '</div>';
 
+const material =
+    new THREE.LineBasicMaterial({
+        vertexColors: true
+    });
 
-            box.appendChild(d);
 
-            labels.push({
-                d,
-                n
-            });
+const line =
+    new THREE.Line(
+        geometry,
+        material
+    );
 
 
-            $('b1').innerHTML =
-                '<b>Kicau #' +
-                cnt +
-                ' · nada ' +
-                (
-                    up
-                        ? 'naik ↗ (belok ke atas)'
-                        : 'turun ↘ (belok ke bawah)'
-                ) +
-                '</b> · ' +
-                nm(f0) +
-                ' → ' +
-                nm(f1) +
-                ' · periode ' +
-                per(f0) +
-                ' → ' +
-                per(f1) +
-                ' ms · ' +
-                (dur * 1000).toFixed(0) +
-                ' ms · ±' +
-                cyc.toFixed(0) +
-                ' getaran';
+line.frustumCulled =
+    false;
 
 
-            $('b3').textContent =
-                'Selisih ' +
-                (
-                    up ? '+' : '−'
-                ) +
-                Math.abs(f1 - f0).toFixed(0) +
-                ' Hz menentukan seberapa curam ' +
-                'belokan atas/bawah; frekuensi awal ' +
-                kh(f0) +
-                ' kHz menentukan belokan depan/belakang.';
-        }
+group.add(line);
 
 
-        // =========================================================
-        // ANIMASI
-        // =========================================================
+/* =========================================================
+   LINE STATE
+========================================================= */
 
-        const vv =
-            new THREE.Vector3();
+let pointCount = 0;
 
+let x = 0;
+let y = 0;
+let z = 0;
 
-        function frame() {
 
-            if (playing) {
-
-                const now =
-                    audio.currentTime;
-
-
-                let Yh = Yc;
-                let Zh = Zc;
-                let hcol = G;
-
-
-                // -------------------------------------------------
-                // UPDATE SETIAP KICAU
-                // -------------------------------------------------
-
-                for (const n of notes) {
-
-                    if (now < n.t) {
-                        break;
-                    }
-
-
-                    if (!n.started) {
-
-                        n.started = true;
-
-                        n.Y0 = Yc;
-                        n.Z0 = Zc;
-                        n.X0 = n.t;
-
-
-                        Yc += n.dy;
-                        Zc += n.dz;
-                    }
-
-
-                    if (
-                        !n.ended &&
-                        now >= n.t + n.vd
-                    ) {
-                        n.ended = true;
-                    }
-
-
-                    if (!n.ended) {
-
-                        const p =
-                            (
-                                now - n.t
-                            ) /
-                            n.vd;
-
-
-                        Yh =
-                            n.Y0 +
-                            p * n.dy;
-
-                        Zh =
-                            n.Z0 +
-                            p * n.dz;
-
-
-                        hcol =
-                            [0, 1, 2].map(i => {
-                                return (
-                                    n.c0[i] +
-                                    (
-                                        n.c1[i] -
-                                        n.c0[i]
-                                    ) * p
-                                );
-                            });
-                    }
-
-
-                    if (
-                        !n.shown &&
-                        now >= n.t + n.vd / 2
-                    ) {
-
-                        n.shown = true;
-
-                        showTheory(n);
-                    }
-                }
-
-
-                // -------------------------------------------------
-                // POSISI GARIS
-                // -------------------------------------------------
-
-                let k = 0;
-
-
-                // Titik awal: ikut ketinggian ruas pertama
-                // yang masih ada, supaya tidak ada kemiringan
-                // palsu saat ruas lama dihapus.
-
-                const first =
-                    notes.find(
-                        n => n.started
-                    );
-
-
-                let px =
-                    xs(T0);
-
-                let py =
-                    first
-                        ? first.Y0 - Yh
-                        : -Yh;
-
-                let pz =
-                    first
-                        ? first.Z0 - Zh
-                        : -Zh;
-
-
-                const BP = [
-                    -L / 2,
-                    -L / 2 + FW
-                ];
-
-
-                // -------------------------------------------------
-                // TAMBAH TITIK
-                // -------------------------------------------------
-
-                const put = (
-                    x,
-                    y,
-                    z,
-                    c,
-                    f
-                ) => {
-
-                    pos[k * 3] = x;
-                    pos[k * 3 + 1] = y;
-                    pos[k * 3 + 2] = z;
-
-
-                    col[k * 3] =
-                        c[0] * f;
-
-                    col[k * 3 + 1] =
-                        c[1] * f;
-
-                    col[k * 3 + 2] =
-                        c[2] * f;
-
-
-                    k++;
-                };
-
-
-                // -------------------------------------------------
-                // BUAT RUAS GARIS
-                // -------------------------------------------------
-
-                const seg = (
-                    x,
-                    y,
-                    z,
-                    c0,
-                    c1
-                ) => {
-
-                    let sx = px;
-                    let sy = py;
-                    let sz = pz;
-
-                    let sc = c0;
-
-
-                    const pcs = [];
-
-
-                    for (const b of BP) {
-
-                        if (
-                            px < b &&
-                            b < x
-                        ) {
-
-                            const u =
-                                (b - px) /
-                                (x - px);
-
-
-                            pcs.push([
-                                b,
-
-                                py +
-                                (y - py) * u,
-
-                                pz +
-                                (z - pz) * u,
-
-                                c0.map(
-                                    (v, i) => {
-                                        return (
-                                            v +
-                                            (
-                                                c1[i] -
-                                                v
-                                            ) * u
-                                        );
-                                    }
-                                )
-                            ]);
-                        }
-                    }
-
-
-                    pcs.push([
-                        x,
-                        y,
-                        z,
-                        c1
-                    ]);
-
-
-                    for (const q of pcs) {
-
-                        if (
-                            k + 2 >
-                            MAXV
-                        ) {
-                            break;
-                        }
-
-
-                        put(
-                            sx,
-                            sy,
-                            sz,
-                            sc,
-                            fd(sx)
-                        );
-
-
-                        put(
-                            q[0],
-                            q[1],
-                            q[2],
-                            q[3],
-                            fd(q[0])
-                        );
-
-
-                        sx = q[0];
-                        sy = q[1];
-                        sz = q[2];
-                        sc = q[3];
-                    }
-
-
-                    px = x;
-                    py = y;
-                    pz = z;
-                };
-
-
-                // -------------------------------------------------
-                // RENDER SETIAP KICAU
-                // -------------------------------------------------
-
-                for (const n of notes) {
-
-                    if (!n.started) {
-                        continue;
-                    }
-
-
-                    const p =
-                        clamp(
-                            (now - n.t) /
-                            n.vd,
-                            0,
-                            1
-                        );
-
-
-                    const x0 =
-                        xs(n.X0);
-
-
-                    const x1 =
-                        xs(
-                            n.X0 +
-                            p * n.vd
-                        );
-
-
-                    const cb =
-                        [0, 1, 2].map(i => {
-
-                            return (
-                                n.c0[i] +
-                                (
-                                    n.c1[i] -
-                                    n.c0[i]
-                                ) * p
-                            );
-                        });
-
-
-                    seg(
-                        x0,
-                        n.Y0 - Yh,
-                        n.Z0 - Zh,
-                        G,
-                        G
-                    );
-
-
-                    seg(
-                        x1,
-                        n.Y0 +
-                            p * n.dy -
-                            Yh,
-
-                        n.Z0 +
-                            p * n.dz -
-                            Zh,
-
-                        n.c0,
-                        cb
-                    );
-                }
-
-
-                // -------------------------------------------------
-                // GARIS DEPAN
-                // -------------------------------------------------
-
-                seg(
-                    L / 2,
-                    0,
-                    0,
-                    G,
-                    G
-                );
-
-
-                // -------------------------------------------------
-                // UPDATE GEOMETRY
-                // -------------------------------------------------
-
-                geo.setDrawRange(
-                    0,
-                    k
-                );
-
-
-                geo.attributes.position.needsUpdate =
-                    true;
-
-                geo.attributes.color.needsUpdate =
-                    true;
-
-
-                // -------------------------------------------------
-                // HAPUS RUAS YANG SUDAH LEWAT
-                // -------------------------------------------------
-
-                notes = notes.filter(n => {
-
-                    return !(
-                        n.ended &&
-                        xs(
-                            n.X0 + n.vd
-                        ) <
-                        -L / 2 - 1
-                    );
-                });
-
-
-                // -------------------------------------------------
-                // UPDATE LABEL
-                // -------------------------------------------------
-
-                grp.updateMatrixWorld();
-
-
-                const w =
-                    box.clientWidth;
-
-                const h =
-                    box.clientHeight;
-
-
-                labels = labels.filter(l => {
-
-                    const n = l.n;
-
-
-                    if (!notes.includes(n)) {
-
-                        l.d.remove();
-
-                        return false;
-                    }
-
-
-                    const x =
-                        xs(
-                            n.X0 +
-                            n.vd / 2
-                        );
-
-
-                    vv.set(
-                        x,
-
-                        n.Y0 +
-                            n.dy / 2 -
-                            Yh +
-                            0.3,
-
-                        n.Z0 +
-                            n.dz / 2 -
-                            Zh
-                    );
-
-
-                    vv
-                        .applyMatrix4(
-                            grp.matrixWorld
-                        )
-                        .project(cam);
-
-
-                    l.d.style.left =
-                        (
-                            (
-                                vv.x * 0.5
-                            ) +
-                            0.5
-                        ) *
-                        w +
-                        'px';
-
-
-                    l.d.style.top =
-                        (
-                            (
-                                -vv.y * 0.5
-                            ) +
-                            0.5
-                        ) *
-                        h +
-                        'px';
-
-
-                    l.d.style.opacity =
-                        fd(x);
-
-
-                    return true;
-                });
-            }
-
-
-            renderer.render(
-                scene,
-                cam
-            );
-
-
-            requestAnimationFrame(
-                frame
-            );
-        }
-
-
-        requestAnimationFrame(
-            frame
+/* =========================================================
+   ADD POINT
+========================================================= */
+
+function addPoint(
+    x,
+    y,
+    z,
+    color
+) {
+
+    if (
+        pointCount >=
+        MAX_POINTS
+    ) {
+
+        positions.copyWithin(
+            0,
+            3
         );
-    </script>
+
+
+        colors.copyWithin(
+            0,
+            3
+        );
+
+
+        pointCount =
+            MAX_POINTS - 1;
+
+    }
+
+
+    const i =
+        pointCount * 3;
+
+
+    positions[i] =
+        x;
+
+    positions[i + 1] =
+        y;
+
+    positions[i + 2] =
+        z;
+
+
+    colors[i] =
+        color[0];
+
+    colors[i + 1] =
+        color[1];
+
+    colors[i + 2] =
+        color[2];
+
+
+    pointCount++;
+
+
+    geometry.setDrawRange(
+        0,
+        pointCount
+    );
+
+
+    geometry.attributes
+        .position
+        .needsUpdate = true;
+
+
+    geometry.attributes
+        .color
+        .needsUpdate = true;
+}
+
+
+/* =========================================================
+   INITIAL POINT
+========================================================= */
+
+addPoint(
+    0,
+    0,
+    0,
+    [
+        0.45,
+        0.47,
+        0.52
+    ]
+);
+
+
+/* =========================================================
+   REALTIME THEORY
+========================================================= */
+
+function updateTheory(
+    freq,
+    difference
+) {
+
+    if (freq <= 0) {
+
+        return;
+
+    }
+
+
+    /*
+     * T = 1 / f
+     */
+
+    const period =
+        1 / freq;
+
+
+    /*
+     * λ = v / f
+     *
+     * v = 343 m/s
+     */
+
+    const wavelength =
+        343 / freq;
+
+
+    /*
+     * ω = 2πf
+     */
+
+    const angularFrequency =
+        2 *
+        Math.PI *
+        freq;
+
+
+    /* =====================================================
+       FREKUENSI
+    ===================================================== */
+
+    $("theory-frequency").textContent =
+        "f = " +
+        freq.toFixed(0) +
+        " Hz";
+
+
+    /* =====================================================
+       PERIODE
+    ===================================================== */
+
+    $("theory-period").textContent =
+        "T = 1 / " +
+        freq.toFixed(0) +
+        " = " +
+        period.toFixed(6) +
+        " s";
+
+
+    /* =====================================================
+       PANJANG GELOMBANG
+    ===================================================== */
+
+    $("theory-wavelength").textContent =
+        "λ = " +
+        wavelength.toFixed(4) +
+        " m";
+
+
+    /* =====================================================
+       DELTA FREKUENSI
+    ===================================================== */
+
+    $("theory-difference").textContent =
+        "Δf = " +
+        (
+            difference >= 0
+                ? "+"
+                : ""
+        ) +
+        difference.toFixed(0) +
+        " Hz";
+
+
+    /* =====================================================
+       ARAH
+    ===================================================== */
+
+    if (difference > 80) {
+
+        $("theory-direction").textContent =
+            "f naik → nada semakin tinggi ↗";
+
+    }
+
+    else if (difference < -80) {
+
+        $("theory-direction").textContent =
+            "f turun → nada semakin rendah ↘";
+
+    }
+
+    else {
+
+        $("theory-direction").textContent =
+            "f relatif stabil → nada stabil →";
+
+    }
+
+
+    /* =====================================================
+       FREKUENSI SUDUT
+    ===================================================== */
+
+    $("theory-angular").textContent =
+        "ω = " +
+        angularFrequency.toFixed(0) +
+        " rad/s";
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    $("theory-status").innerHTML =
+        "λ = v / f → 343 / " +
+        freq.toFixed(0) +
+        " = " +
+        wavelength.toFixed(4) +
+        " m<br>" +
+
+        "Δf menentukan perubahan arah garis 3D.";
+
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+let lastTime =
+    performance.now();
+
+
+function animate(now) {
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    const dt =
+        Math.min(
+            (
+                now -
+                lastTime
+            ) / 1000,
+
+            0.05
+        );
+
+
+    lastTime =
+        now;
+
+
+    if (
+        playing &&
+        audio &&
+        !audio.paused
+    ) {
+
+        const detected =
+            getFrequency();
+
+
+        if (detected > 0) {
+
+            const freq =
+                smoothFrequency(
+                    detected
+                );
+
+
+            /*
+             * Δf
+             */
+
+            const difference =
+                freq -
+                previousFreq;
+
+
+            /*
+             * Perubahan frekuensi
+             * menentukan arah Y.
+             */
+
+            const dy =
+                Math.max(
+                    -0.15,
+
+                    Math.min(
+                        0.15,
+
+                        difference /
+                        1800
+                    )
+                );
+
+
+            /*
+             * Frekuensi absolut
+             * menentukan kedalaman Z.
+             */
+
+            const targetZ =
+                (
+                    freq -
+                    4500
+                ) /
+                1400;
+
+
+            const dz =
+                (
+                    targetZ -
+                    z
+                ) *
+                0.025;
+
+
+            /*
+             * X terus maju.
+             */
+
+            x +=
+                0.10 *
+                dt *
+                60;
+
+
+            y +=
+                dy;
+
+
+            z +=
+                dz;
+
+
+            /*
+             * Batas ruang 3D.
+             */
+
+            y =
+                Math.max(
+                    -8,
+
+                    Math.min(
+                        8,
+                        y
+                    )
+                );
+
+
+            z =
+                Math.max(
+                    -8,
+
+                    Math.min(
+                        8,
+                        z
+                    )
+                );
+
+
+            const rgb =
+                getColor(
+                    freq
+                );
+
+
+            addPoint(
+                x,
+                y,
+                z,
+                rgb
+            );
+
+
+            /*
+             * UPDATE TEORI REALTIME
+             */
+
+            updateTheory(
+                freq,
+                difference
+            );
+
+
+            previousFreq =
+                freq;
+
+
+            /*
+             * Informasi bawah.
+             */
+
+            const wavelength =
+                343 / freq;
+
+
+            $("b1").innerHTML =
+                "<b>" +
+                (
+                    freq / 1000
+                ).toFixed(2) +
+                " kHz</b> · " +
+
+                (
+                    difference >= 0
+                        ? "naik ↗"
+                        : "turun ↘"
+                );
+
+
+            $("b3").textContent =
+                "λ = " +
+                (
+                    wavelength * 100
+                ).toFixed(1) +
+                " cm · Δf = " +
+
+                (
+                    difference >= 0
+                        ? "+"
+                        : ""
+                ) +
+
+                difference.toFixed(0) +
+                " Hz";
+
+        }
+
+    }
+
+
+    /*
+     * Geser garis sehingga
+     * bagian terbaru tetap
+     * berada di tengah.
+     */
+
+    line.position.x =
+        -(x - 4);
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+
+requestAnimationFrame(
+    animate
+);
+</script>
 
 </body>
-
 </html>
