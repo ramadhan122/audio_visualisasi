@@ -1,816 +1,1397 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="utf-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <title>Kicau Burung - Heliks + Teori</title>
+    <title>Kicau Burung - Satu Garis Tak Putus</title>
 
-  <style>
-    :root {
-      box-sizing: border-box;
-      padding-top: env(safe-area-inset-top, 0px);
-      padding-bottom: env(safe-area-inset-bottom, 0px);
+    <style>
+        :root {
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
 
-      --bg: #f7f6f2;
-      --fg: #1c1c1a;
-      --mut: #6b6a63;
-      --card: #fff;
-      --line: #d9d7cf;
-      --hi: #d8412f;
-    }
+            --bg: #f7f6f2;
+            --fg: #1c1c1a;
+            --mut: #6b6a63;
+            --card: #fff;
+            --line: #d9d7cf;
+            --hi: #d8412f;
+        }
 
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        --bg: #141413;
-        --fg: #ecebe5;
-        --mut: #9a988f;
-        --card: #1f1f1d;
-        --line: #3a3935;
-        --hi: #ff6b57;
-      }
-    }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #141413;
+                --fg: #ecebe5;
+                --mut: #9a988f;
+                --card: #1f1f1d;
+                --line: #3a3935;
+                --hi: #ff6b57;
+            }
+        }
 
-    :root[data-theme="dark"] {
-      --bg: #141413;
-      --fg: #ecebe5;
-      --mut: #9a988f;
-      --card: #1f1f1d;
-      --line: #3a3935;
-      --hi: #ff6b57;
-    }
+        :root[data-theme="dark"] {
+            --bg: #141413;
+            --fg: #ecebe5;
+            --mut: #9a988f;
+            --card: #1f1f1d;
+            --line: #3a3935;
+            --hi: #ff6b57;
+        }
 
-    html {
-      scroll-padding-top: env(safe-area-inset-top, 0px);
-    }
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px);
+        }
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--fg);
-      font: 15px/1.5 system-ui, -apple-system, sans-serif;
-    }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--fg);
+            font: 15px/1.5 system-ui, -apple-system, sans-serif;
+        }
 
-    main {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 16px;
-    }
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 16px;
+        }
 
-    h1 {
-      font-size: 20px;
-      margin: 0 0 2px;
-    }
+        h1 {
+            font-size: 20px;
+            margin: 0 0 2px;
+        }
 
-    p {
-      color: var(--mut);
-      margin: 0 0 12px;
-      font-size: 14px;
-    }
+        p {
+            color: var(--mut);
+            margin: 0 0 12px;
+            font-size: 14px;
+        }
 
-    #v {
-      height: 380px;
-      background: #0c0d10;
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-    }
+        #v {
+            height: 380px;
+            background: #0c0d10;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
 
-    #v canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      touch-action: none;
-    }
+        #v canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
 
-    .lb {
-      position: absolute;
-      transform: translate(-50%, -100%);
-      pointer-events: none;
-      text-align: center;
-      font-size: 11px;
-      line-height: 1.3;
-      color: #e6e8ee;
-      white-space: nowrap;
-    }
+        .lb {
+            position: absolute;
+            transform: translate(-50%, -100%);
+            pointer-events: none;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #e6e8ee;
+            white-space: nowrap;
+        }
 
-    .lb .tx {
-      background: rgba(12, 13, 16, 0.78);
-      border: 1px solid #3a3d46;
-      border-radius: 6px;
-      padding: 2px 6px;
-    }
+        .lb .tx {
+            background: rgba(12, 13, 16, 0.78);
+            border: 1px solid #3a3d46;
+            border-radius: 6px;
+            padding: 2px 6px;
+        }
 
-    .lb .tx b {
-      display: block;
-      font-size: 12px;
-    }
+        .lb .tx b {
+            display: block;
+            font-size: 12px;
+        }
 
-    .lb .ld {
-      width: 1px;
-      background: #4a4d57;
-      margin: 0 auto;
-    }
+        .lb .ld {
+            width: 1px;
+            background: #4a4d57;
+            margin: 0 auto;
+        }
 
-    #bar {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 8px 12px;
-      background: rgba(12, 13, 16, 0.85);
-      border-top: 1px solid #2a2c33;
-      color: #c9ccd4;
-      font-size: 12px;
-      line-height: 1.5;
-      pointer-events: none;
-    }
+        #bar {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 8px 12px;
+            background: rgba(12, 13, 16, 0.85);
+            border-top: 1px solid #2a2c33;
+            color: #c9ccd4;
+            font-size: 12px;
+            line-height: 1.5;
+            pointer-events: none;
+        }
 
-    #bar b {
-      color: #fff;
-    }
+        #bar b {
+            color: #fff;
+        }
 
-    #bar code {
-      font-family: ui-monospace, Menlo, monospace;
-      color: #9fd3ff;
-    }
+        #bar code {
+            font-family: ui-monospace, Menlo, monospace;
+            color: #9fd3ff;
+        }
 
-    button {
-      font: inherit;
-      font-weight: 600;
-      padding: 10px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-      background: var(--card);
-      color: var(--fg);
-      cursor: pointer;
-      margin-top: 12px;
-    }
+        button {
+            font: inherit;
+            font-weight: 600;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--card);
+            color: var(--fg);
+            cursor: pointer;
+            margin-top: 12px;
+        }
 
-    button.on {
-      background: var(--hi);
-      color: #fff;
-      border-color: var(--hi);
-    }
+        button.on {
+            background: var(--hi);
+            color: #fff;
+            border-color: var(--hi);
+        }
 
-    ul {
-      color: var(--mut);
-      font-size: 13px;
-      margin: 12px 0 0;
-      padding-left: 18px;
-    }
-  </style>
+        ul {
+            color: var(--mut);
+            font-size: 13px;
+            margin: 12px 0 0;
+            padding-left: 18px;
+        }
+    </style>
 </head>
 
 <body>
-  <main>
-    <h1>Kicau burung sebagai satu garis kontinu</h1>
 
-    <p>
-      Bunyi adalah tekanan udara terhadap waktu. Digambar sebagai heliks:
-      sumbu panjang = waktu, putaran = fase, lebar = amplitudo.
-      Teori tiap kicau muncul langsung di atas heliksnya.
-    </p>
+    <main>
 
-    <div id="v">
-      <div id="bar">
-        <div id="b1">
-          <b>Teori</b> · tekan "Putar kicau" untuk memulai
+        <h1>Satu garis tak putus, satu ruas per bunyi</h1>
+
+        <p>
+            Waktu berjalan ke kanan sebagai satu garis kontinu.
+            Saat hening garis abu-abu lurus mendatar.
+            Saat ada kicau, garis berwarna berbelok lurus ke arah
+            3D tertentu, lalu lanjut lurus dari ujungnya.
+        </p>
+
+        <div id="v">
+
+            <div id="bar">
+
+                <div id="b1">
+                    <b>Teori</b> · tekan "Putar kicau" untuk memulai
+                </div>
+
+                <div id="b2">
+                    <code>
+                        belok atas/bawah = f akhir − f awal
+                        &nbsp;·&nbsp;
+                        belok depan/belakang = f awal
+                        &nbsp;·&nbsp;
+                        λ = v/f
+                        &nbsp;(v = 343 m/s)
+                    </code>
+                </div>
+
+                <div id="b3"></div>
+
+            </div>
+
         </div>
 
-        <div id="b2">
-          <code>
-            p(t) = A·sin φ(t)
-            &nbsp;·&nbsp;
-            φ(t) = 2π∫f(t)dt
-            &nbsp;·&nbsp;
-            λ = v/f
-            &nbsp;(v = 343 m/s)
-          </code>
-        </div>
+        <button id="play">
+            ▶ Putar kicau
+        </button>
 
-        <div id="b3"></div>
-      </div>
-    </div>
+        <ul>
+            <li>
+                Nada naik (↗) mengarahkan garis ke atas,
+                nada turun (↘) ke bawah.
+            </li>
 
-    <button id="play">▶ Putar kicau</button>
+            <li>
+                Nada awal tinggi mengarahkan ke depan,
+                nada awal rendah ke belakang.
+                Warna: merah = tinggi, biru = rendah.
+            </li>
 
-    <ul>
-      <li>
-        Garis lurus mendatar = hening. Heliks makin rapat = nada makin tinggi.
-      </li>
+            <li>
+                Pandangan mengikuti titik ujung garis terakhir.
+                Geser layar untuk memutar sudut pandang 3D.
+                Gerakan diperlambat agar mudah dilihat.
+            </li>
+        </ul>
 
-      <li>
-        Label di atas heliks: frekuensi awal→akhir (↗ naik, ↘ turun)
-        dan panjang gelombang λ.
-      </li>
+    </main>
 
-      <li>
-        Gerakan diperlambat dan frekuensi visual jauh lebih rendah
-        dari aslinya agar putarannya terlihat.
-      </li>
-    </ul>
-  </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // =========================================================
+        // ELEMENT
+        // =========================================================
 
-  <script>
-    const $ = id => document.getElementById(id);
-    const box = $("v");
-
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true
-    });
-
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
-    box.insertBefore(renderer.domElement, box.firstChild);
-
-    const scene = new THREE.Scene();
-
-    const cam = new THREE.PerspectiveCamera(
-      45,
-      1,
-      0.1,
-      200
-    );
-
-    cam.position.set(0, 1.5, 34);
-
-    const grp = new THREE.Group();
-
-    scene.add(grp);
-    grp.rotation.set(0.2, -0.5, 0);
-
-    function size() {
-      const w = box.clientWidth;
-      const h = box.clientHeight;
-
-      renderer.setSize(w, h);
-
-      cam.aspect = w / h;
-      cam.updateProjectionMatrix();
-    }
-
-    addEventListener("resize", size);
-    size();
-
-    let lx = 0;
-    let ly = 0;
-    let dn = false;
-
-    const el = renderer.domElement;
-
-    el.addEventListener("pointerdown", e => {
-      dn = true;
-
-      lx = e.clientX;
-      ly = e.clientY;
-
-      el.setPointerCapture(e.pointerId);
-    });
-
-    el.addEventListener("pointermove", e => {
-      if (!dn) return;
-
-      grp.rotation.y += (e.clientX - lx) * 0.006;
-      grp.rotation.x += (e.clientY - ly) * 0.006;
-
-      lx = e.clientX;
-      ly = e.clientY;
-    });
-
-    el.addEventListener("pointerup", () => {
-      dn = false;
-    });
-
-    el.addEventListener("pointercancel", () => {
-      dn = false;
-    });
+        const $ = id => document.getElementById(id);
+        const box = $('v');
 
 
-    // ============================================================
-    // SUARA KICAU
-    // ============================================================
+        // =========================================================
+        // THREE.JS
+        // =========================================================
 
-    let audio;
-    let master;
-    let timer;
-    let playing = false;
-    let notes = [];
-    let nextT = 0;
-    let left = 0;
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
 
-    const R = Math.random;
+        renderer.setPixelRatio(
+            Math.min(devicePixelRatio || 1, 2)
+        );
 
-    const clamp = (v, a, b) => {
-      return Math.max(a, Math.min(b, v));
-    };
+        box.insertBefore(
+            renderer.domElement,
+            box.firstChild
+        );
 
-    function note(t) {
-      const dur = 0.08 + R() * 0.07;
+        const scene = new THREE.Scene();
 
-      const f0 = 2200 + R() * 1800;
+        const cam = new THREE.PerspectiveCamera(
+            45,
+            1,
+            0.1,
+            200
+        );
 
-      const f1 = clamp(
-        f0 + (R() - 0.5) * 2600,
-        1800,
-        5000
-      );
+        cam.position.set(0, 1.5, 34);
 
-      const o = audio.createOscillator();
-      const g = audio.createGain();
+        const grp = new THREE.Group();
 
-      o.frequency.setValueAtTime(f0, t);
+        scene.add(grp);
 
-      o.frequency.exponentialRampToValueAtTime(
-        f1,
-        t + dur
-      );
+        grp.rotation.set(
+            0.2,
+            -0.5,
+            0
+        );
 
-      g.gain.setValueAtTime(0, t);
 
-      g.gain.linearRampToValueAtTime(
-        0.5,
-        t + dur * 0.25
-      );
+        // =========================================================
+        // RESIZE
+        // =========================================================
 
-      g.gain.linearRampToValueAtTime(
-        0,
-        t + dur
-      );
+        function size() {
+            const w = box.clientWidth;
+            const h = box.clientHeight;
 
-      o.connect(g).connect(master);
+            renderer.setSize(w, h);
 
-      o.start(t);
-      o.stop(t + dur + 0.02);
-
-      notes.push({
-        t,
-        dur,
-        f0,
-        f1
-      });
-    }
-
-    function sched() {
-      const now = audio.currentTime;
-
-      while (nextT < now + 0.4) {
-        if (left === 0) {
-          left = 3 + Math.floor(R() * 2);
-
-          if (nextT < now + 0.05) {
-            nextT = now + 0.05;
-          }
+            cam.aspect = w / h;
+            cam.updateProjectionMatrix();
         }
 
-        note(nextT);
+        addEventListener('resize', size);
 
-        left--;
+        size();
 
-        nextT += left
-          ? 0.32 + R() * 0.1
-          : 1.2 + R() * 0.8;
-      }
-    }
 
-    $("play").onclick = () => {
-      if (!playing) {
-        audio =
-          audio ||
-          new (
-            window.AudioContext ||
-            window.webkitAudioContext
-          )();
+        // =========================================================
+        // CAMERA / TOUCH CONTROL
+        // =========================================================
 
-        audio.resume();
+        let lx = 0;
+        let ly = 0;
+        let dn = false;
 
-        master = audio.createGain();
-        master.gain.value = 0.25;
+        const el = renderer.domElement;
 
-        master.connect(audio.destination);
+        el.addEventListener('pointerdown', e => {
+            dn = true;
 
-        nextT = audio.currentTime + 0.05;
-        left = 0;
+            lx = e.clientX;
+            ly = e.clientY;
 
-        sched();
+            el.setPointerCapture(e.pointerId);
+        });
 
-        timer = setInterval(sched, 100);
-
-        playing = true;
-
-        $("play").textContent = "■ Hentikan";
-        $("play").classList.add("on");
-      } else {
-        clearInterval(timer);
-
-        master.gain.setTargetAtTime(
-          0,
-          audio.currentTime,
-          0.02
-        );
-
-        notes = [];
-        playing = false;
-
-        $("play").textContent = "▶ Putar kicau";
-        $("play").classList.remove("on");
-      }
-    };
-
-
-    // ============================================================
-    // HELIKS
-    // (y,z) = A * env * (sin fase, cos fase)
-    // x = waktu
-    // ============================================================
-
-    const N = 1600;
-    const S = 4;
-    const L = 34;
-    const A = 3.2;
-    const SLOW = 3;
-
-    const fm = f => {
-      return 6 + ((f - 1800) / 3200) * 8;
-    };
-
-    const Y = new Float32Array(N);
-    const Z = new Float32Array(N);
-
-    const BR = new Float32Array(N);
-    const BG = new Float32Array(N);
-    const BB = new Float32Array(N);
-
-    const pos = new Float32Array(N * 3);
-    const col = new Float32Array(N * 3);
-
-    const grey = [0.45, 0.47, 0.52];
-
-    BR.fill(grey[0]);
-    BG.fill(grey[1]);
-    BB.fill(grey[2]);
-
-    const geo = new THREE.BufferGeometry();
-
-    geo.setAttribute(
-      "position",
-      new THREE.BufferAttribute(pos, 3)
-    );
-
-    geo.setAttribute(
-      "color",
-      new THREE.BufferAttribute(col, 3)
-    );
-
-    const mat = new THREE.LineBasicMaterial({
-      vertexColors: true
-    });
-
-    [[0, 0, 0], [0, 0.06, 0.06], [0, -0.06, 0]].forEach(o => {
-      const l = new THREE.Line(geo, mat);
-
-      l.position.set(...o);
-      l.frustumCulled = false;
-
-      grp.add(l);
-    });
-
-    grp.add(
-      new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints([
-          new THREE.Vector3(-L / 2, 0, 0),
-          new THREE.Vector3(L / 2, 0, 0)
-        ]),
-        new THREE.LineBasicMaterial({
-          color: 0x3a3d46
-        })
-      )
-    );
-
-    function rebuild() {
-      for (let i = 0; i < N; i++) {
-        pos[i * 3] =
-          (i / (N - 1) - 0.5) * L;
-
-        pos[i * 3 + 1] = Y[i];
-        pos[i * 3 + 2] = Z[i];
-
-        const f =
-          0.25 +
-          0.75 *
-          Math.pow(i / N, 0.7);
-
-        col[i * 3] = BR[i] * f;
-        col[i * 3 + 1] = BG[i] * f;
-        col[i * 3 + 2] = BB[i] * f;
-      }
-
-      geo.attributes.position.needsUpdate = true;
-      geo.attributes.color.needsUpdate = true;
-    }
-
-    rebuild();
-
-
-    // ============================================================
-    // TEORI DI DALAM VISUAL
-    // ============================================================
-
-    const NN = [
-      "C", "C#", "D", "D#", "E", "F",
-      "F#", "G", "G#", "A", "A#", "B"
-    ];
-
-    const V = 343;
-
-    const nm = f => {
-      const m =
-        Math.round(
-          69 + 12 * Math.log2(f / 440)
-        );
-
-      return (
-        NN[((m % 12) + 12) % 12] +
-        (Math.floor(m / 12) - 1)
-      );
-    };
-
-    const kh = f => {
-      return (f / 1000).toFixed(2);
-    };
-
-    const lam = f => {
-      return (V / f * 100).toFixed(1);
-    };
-
-    const per = f => {
-      return (1000 / f).toFixed(2);
-    };
-
-    let cnt = 0;
-    let labels = [];
-
-    function showTheory(n) {
-      cnt++;
-
-      const up = n.f1 > n.f0;
-      const {
-        f0,
-        f1,
-        dur
-      } = n;
-
-      const row = cnt % 3;
-
-      const cyc =
-        Math.abs(f1 - f0) < 1
-          ? dur * f0
-          : dur *
-            (f1 - f0) /
-            Math.log(f1 / f0);
-
-      const d = document.createElement("div");
-
-      d.className = "lb";
-
-      d.innerHTML = `
-        <div class="tx">
-          <b>
-            ${up ? "↗ " : "↘ "}
-            ${kh(f0)}→${kh(f1)} kHz
-          </b>
-
-          λ ${lam(f0)}→${lam(f1)} cm
-        </div>
-
-        <div
-          class="ld"
-          style="height:${10 + (2 - row) * 40}px"
-        ></div>
-      `;
-
-      box.appendChild(d);
-
-      labels.push({
-        d,
-        idx: N - 1
-      });
-
-      $("b1").innerHTML = `
-        <b>
-          Kicau #${cnt} ·
-          nada ${up ? "naik ↗" : "turun ↘"}
-        </b>
-        · ${nm(f0)} → ${nm(f1)}
-        · periode ${per(f0)} → ${per(f1)} ms
-        · ${(dur * 1000).toFixed(0)} ms
-        · ±${cyc.toFixed(0)} getaran
-      `;
-
-      $("b3").textContent = up
-        ? "Frekuensi naik → periode memendek, λ mengecil → heliks makin rapat."
-        : "Frekuensi turun → periode memanjang, λ membesar → heliks makin renggang.";
-    }
-
-
-    // ============================================================
-    // ANIMASI
-    // ============================================================
-
-    let hue = 0.58;
-    let last = performance.now();
-
-    const tmp = new THREE.Color();
-    const vv = new THREE.Vector3();
-
-    function frame(ms) {
-      const dt = clamp(
-        (ms - last) / 1000,
-        0.005,
-        0.05
-      );
-
-      last = ms;
-
-      if (playing) {
-        const now = audio.currentTime;
-
-        for (const n of notes) {
-          if (
-            !n.shown &&
-            now >= n.t + n.dur * SLOW / 2
-          ) {
-            n.shown = true;
-            showTheory(n);
-          }
-        }
-
-        notes = notes.filter(
-          n =>
-            now - n.t <
-            n.dur * SLOW + 0.1
-        );
-
-        Y.copyWithin(0, S);
-        Z.copyWithin(0, S);
-
-        BR.copyWithin(0, S);
-        BG.copyWithin(0, S);
-        BB.copyWithin(0, S);
-
-        for (let k = 0; k < S; k++) {
-          const tt =
-            now -
-            ((S - 1 - k) / S) * dt;
-
-          let y = 0;
-          let z = 0;
-          let amp = 0;
-
-          for (const n of notes) {
-            const vd = n.dur * SLOW;
-            const tau = tt - n.t;
-
-            if (tau < 0 || tau >= vd) {
-              continue;
+        el.addEventListener('pointermove', e => {
+            if (!dn) {
+                return;
             }
 
-            const p = tau / vd;
+            grp.rotation.y += (
+                e.clientX - lx
+            ) * 0.006;
 
-            const a = fm(n.f0);
-            const b = fm(n.f1);
+            grp.rotation.x += (
+                e.clientY - ly
+            ) * 0.006;
 
-            const ph =
-              2 *
-              Math.PI *
-              vd *
-              (
-                a * p +
-                (b - a) * p * p / 2
-              );
+            lx = e.clientX;
+            ly = e.clientY;
+        });
 
-            const env =
-              Math.pow(
-                Math.sin(Math.PI * p),
-                0.7
-              );
+        el.addEventListener('pointerup', () => {
+            dn = false;
+        });
 
-            y +=
-              A *
-              env *
-              Math.sin(ph);
+        el.addEventListener('pointercancel', () => {
+            dn = false;
+        });
 
-            z +=
-              A *
-              env *
-              Math.cos(ph);
 
-            amp = Math.max(amp, env);
+        // =========================================================
+        // KONFIGURASI VISUAL
+        // =========================================================
 
-            const f =
-              n.f0 *
-              Math.pow(
-                n.f1 / n.f0,
-                p
-              );
+        const R = Math.random;
 
-            hue =
-              0.58 -
-              clamp(
-                (f - 1800) / 3200,
+        const clamp = (v, a, b) => {
+            return Math.max(
+                a,
+                Math.min(b, v)
+            );
+        };
+
+        const L = 34;
+        const A = 2.6;
+        const SLOW = 2;
+        const WIN = 6;
+
+        // WIN = detik yang terlihat di layar
+
+        const FW = L * 0.35;
+
+        // Lebar zona pudar di sisi kiri
+
+        const fd = x => {
+            const u = clamp(
+                (x + L / 2) / FW,
                 0,
                 1
-              ) *
-              0.58;
-          }
+            );
 
-          const i = N - S + k;
+            return u * u * (3 - 2 * u);
+        };
 
-          Y[i] = y;
-          Z[i] = z;
+        // 0 di tepi kiri -> 1 (smoothstep)
 
-          tmp.setHSL(
-            hue,
-            0.9,
-            0.62
-          );
+        let T0 = 0;
 
-          const e =
-            Math.min(1, amp * 1.5);
+        const xs = t => {
+            return L / 2 - (
+                (audio.currentTime - t) * L / WIN
+            );
+        };
 
-          BR[i] =
-            grey[0] +
-            (tmp.r - grey[0]) * e;
+        const G = [
+            0.45,
+            0.47,
+            0.52
+        ];
 
-          BG[i] =
-            grey[1] +
-            (tmp.g - grey[1]) * e;
+        const tmp = new THREE.Color();
 
-          BB[i] =
-            grey[2] +
-            (tmp.b - grey[2]) * e;
+        const hc = f => {
+            tmp.setHSL(
+                0.6 -
+                clamp(
+                    (f - 1800) / 3200,
+                    0,
+                    1
+                ) * 0.6,
+                0.9,
+                0.62
+            );
+
+            return [
+                tmp.r,
+                tmp.g,
+                tmp.b
+            ];
+        };
+
+
+        // =========================================================
+        // SUARA KICAU
+        // =========================================================
+
+        let audio;
+        let master;
+        let timer;
+        let playing = false;
+
+        let notes = [];
+        let labels = [];
+        let pts = [];
+
+        let Yc = 0;
+        let Zc = 0;
+
+        let nextT = 0;
+        let left = 0;
+        let cnt = 0;
+
+
+        // =========================================================
+        // MEMBUAT SATU NADA
+        // =========================================================
+
+        function note(t) {
+
+            const dur = 0.08 + R() * 0.07;
+
+            const f0 = 2200 + R() * 1800;
+
+            const f1 = clamp(
+                f0 + (R() - 0.5) * 2600,
+                1800,
+                5000
+            );
+
+            const o = audio.createOscillator();
+            const g = audio.createGain();
+
+
+            o.frequency.setValueAtTime(
+                f0,
+                t
+            );
+
+            o.frequency.exponentialRampToValueAtTime(
+                f1,
+                t + dur
+            );
+
+
+            g.gain.setValueAtTime(
+                0,
+                t
+            );
+
+            g.gain.linearRampToValueAtTime(
+                0.5,
+                t + dur * 0.25
+            );
+
+            g.gain.linearRampToValueAtTime(
+                0,
+                t + dur
+            );
+
+
+            o.connect(g).connect(master);
+
+            o.start(t);
+
+            o.stop(
+                t + dur + 0.02
+            );
+
+
+            notes.push({
+                t,
+                dur,
+                vd: dur * SLOW,
+                f0,
+                f1,
+
+                dy:
+                    (f1 - f0) /
+                    1300 *
+                    A,
+
+                dz:
+                    (f0 - 3200) /
+                    1000 *
+                    A,
+
+                c0: hc(f0),
+                c1: hc(f1)
+            });
         }
 
-        rebuild();
 
-        labels.forEach(l => {
-          l.idx -= S;
-        });
-      }
+        // =========================================================
+        // PENJADWALAN KICAU
+        // =========================================================
 
+        function sched() {
 
-      // ==========================================================
-      // LETAKKAN LABEL DI ATAS HELIKS
-      // PROYEKSI 3D → LAYAR
-      // ==========================================================
+            const now = audio.currentTime;
 
-      grp.updateMatrixWorld();
+            while (nextT < now + 0.4) {
 
-      const w = box.clientWidth;
-      const h = box.clientHeight;
+                if (left === 0) {
 
-      labels = labels.filter(l => {
-        if (l.idx < N * 0.06) {
-          l.d.remove();
-          return false;
+                    left =
+                        3 +
+                        Math.floor(R() * 2);
+
+                    if (nextT < now + 0.05) {
+                        nextT = now + 0.05;
+                    }
+                }
+
+                note(nextT);
+
+                left--;
+
+                nextT += left
+                    ? 0.32 + R() * 0.1
+                    : 1.2 + R() * 0.8;
+            }
         }
 
-        vv.set(
-          (l.idx / (N - 1) - 0.5) * L,
-          A + 0.4,
-          0
+
+        // =========================================================
+        // CLEAR VISUAL
+        // =========================================================
+
+        function clearAll() {
+
+            notes = [];
+
+            pts = [];
+
+            labels.forEach(l => {
+                l.d.remove();
+            });
+
+            labels = [];
+
+            geo.setDrawRange(
+                0,
+                0
+            );
+        }
+
+
+        // =========================================================
+        // PLAY / STOP
+        // =========================================================
+
+        $('play').onclick = () => {
+
+            if (!playing) {
+
+                audio =
+                    audio ||
+                    new (
+                        window.AudioContext ||
+                        window.webkitAudioContext
+                    )();
+
+                audio.resume();
+
+
+                master =
+                    audio.createGain();
+
+                master.gain.value = 0.25;
+
+                master.connect(
+                    audio.destination
+                );
+
+
+                Yc = 0;
+                Zc = 0;
+
+                T0 =
+                    audio.currentTime -
+                    WIN -
+                    1;
+
+
+                nextT =
+                    audio.currentTime +
+                    0.05;
+
+                left = 0;
+
+
+                sched();
+
+                timer = setInterval(
+                    sched,
+                    100
+                );
+
+
+                playing = true;
+
+                $('play').textContent =
+                    '■ Hentikan';
+
+                $('play').classList.add(
+                    'on'
+                );
+
+            } else {
+
+                clearInterval(timer);
+
+                master.gain.setTargetAtTime(
+                    0,
+                    audio.currentTime,
+                    0.02
+                );
+
+                clearAll();
+
+
+                playing = false;
+
+                $('play').textContent =
+                    '▶ Putar kicau';
+
+                $('play').classList.remove(
+                    'on'
+                );
+            }
+        };
+
+
+        // =========================================================
+        // SATU GARIS KONTINU
+        // =========================================================
+
+        const MAXV = 1600;
+
+        const pos =
+            new Float32Array(
+                MAXV * 3
+            );
+
+        const col =
+            new Float32Array(
+                MAXV * 3
+            );
+
+
+        const geo =
+            new THREE.BufferGeometry();
+
+
+        geo.setAttribute(
+            'position',
+            new THREE.BufferAttribute(
+                pos,
+                3
+            )
         );
 
-        vv
-          .applyMatrix4(grp.matrixWorld)
-          .project(cam);
+        geo.setAttribute(
+            'color',
+            new THREE.BufferAttribute(
+                col,
+                3
+            )
+        );
 
-        l.d.style.left =
-          ((vv.x * 0.5 + 0.5) * w) + "px";
 
-        l.d.style.top =
-          ((-vv.y * 0.5 + 0.5) * h) + "px";
-
-        l.d.style.opacity =
-          clamp(
-            l.idx / (N * 0.3),
+        geo.setDrawRange(
             0,
-            1
-          );
+            0
+        );
 
-        return true;
-      });
 
-      renderer.render(scene, cam);
+        const mat =
+            new THREE.LineBasicMaterial({
+                vertexColors: true
+            });
 
-      requestAnimationFrame(frame);
-    }
 
-    requestAnimationFrame(frame);
-  </script>
+        [
+            [0, 0, 0],
+            [0, 0.07, 0.07],
+            [0, -0.07, 0],
+            [0, 0, -0.07]
+        ].forEach(o => {
+
+            const l =
+                new THREE.LineSegments(
+                    geo,
+                    mat
+                );
+
+            l.position.set(
+                ...o
+            );
+
+            l.frustumCulled = false;
+
+            grp.add(l);
+        });
+
+
+        // =========================================================
+        // TEORI DI DALAM VISUAL
+        // =========================================================
+
+        const NN = [
+            'C',
+            'C#',
+            'D',
+            'D#',
+            'E',
+            'F',
+            'F#',
+            'G',
+            'G#',
+            'A',
+            'A#',
+            'B'
+        ];
+
+        const V = 343;
+
+
+        const nm = f => {
+
+            const m =
+                Math.round(
+                    69 +
+                    12 *
+                    Math.log2(f / 440)
+                );
+
+            return (
+                NN[
+                    ((m % 12) + 12) % 12
+                ] +
+                (
+                    Math.floor(m / 12) - 1
+                )
+            );
+        };
+
+
+        const kh = f => {
+            return (
+                f / 1000
+            ).toFixed(2);
+        };
+
+
+        const lam = f => {
+            return (
+                V / f * 100
+            ).toFixed(1);
+        };
+
+
+        const per = f => {
+            return (
+                1000 / f
+            ).toFixed(2);
+        };
+
+
+        // =========================================================
+        // LABEL TEORI
+        // =========================================================
+
+        function showTheory(n) {
+
+            cnt++;
+
+
+            const up =
+                n.f1 > n.f0;
+
+
+            const {
+                f0,
+                f1,
+                dur
+            } = n;
+
+
+            const row =
+                cnt % 3;
+
+
+            const cyc =
+                Math.abs(f1 - f0) < 1
+                    ? dur * f0
+                    : dur *
+                      (f1 - f0) /
+                      Math.log(f1 / f0);
+
+
+            const d =
+                document.createElement(
+                    'div'
+                );
+
+
+            d.className = 'lb';
+
+
+            d.innerHTML =
+                '<div class="tx">' +
+                    '<b>' +
+                        (up ? '↗ ' : '↘ ') +
+                        kh(f0) +
+                        '→' +
+                        kh(f1) +
+                        ' kHz' +
+                    '</b>' +
+                    'λ ' +
+                    lam(f0) +
+                    '→' +
+                    lam(f1) +
+                    ' cm' +
+                '</div>' +
+
+                '<div class="ld" ' +
+                    'style="height:' +
+                    (
+                        8 +
+                        (2 - row) * 22
+                    ) +
+                    'px">' +
+                '</div>';
+
+
+            box.appendChild(d);
+
+            labels.push({
+                d,
+                n
+            });
+
+
+            $('b1').innerHTML =
+                '<b>Kicau #' +
+                cnt +
+                ' · nada ' +
+                (
+                    up
+                        ? 'naik ↗ (belok ke atas)'
+                        : 'turun ↘ (belok ke bawah)'
+                ) +
+                '</b> · ' +
+                nm(f0) +
+                ' → ' +
+                nm(f1) +
+                ' · periode ' +
+                per(f0) +
+                ' → ' +
+                per(f1) +
+                ' ms · ' +
+                (dur * 1000).toFixed(0) +
+                ' ms · ±' +
+                cyc.toFixed(0) +
+                ' getaran';
+
+
+            $('b3').textContent =
+                'Selisih ' +
+                (
+                    up ? '+' : '−'
+                ) +
+                Math.abs(f1 - f0).toFixed(0) +
+                ' Hz menentukan seberapa curam ' +
+                'belokan atas/bawah; frekuensi awal ' +
+                kh(f0) +
+                ' kHz menentukan belokan depan/belakang.';
+        }
+
+
+        // =========================================================
+        // ANIMASI
+        // =========================================================
+
+        const vv =
+            new THREE.Vector3();
+
+
+        function frame() {
+
+            if (playing) {
+
+                const now =
+                    audio.currentTime;
+
+
+                let Yh = Yc;
+                let Zh = Zc;
+                let hcol = G;
+
+
+                // -------------------------------------------------
+                // UPDATE SETIAP KICAU
+                // -------------------------------------------------
+
+                for (const n of notes) {
+
+                    if (now < n.t) {
+                        break;
+                    }
+
+
+                    if (!n.started) {
+
+                        n.started = true;
+
+                        n.Y0 = Yc;
+                        n.Z0 = Zc;
+                        n.X0 = n.t;
+
+
+                        Yc += n.dy;
+                        Zc += n.dz;
+                    }
+
+
+                    if (
+                        !n.ended &&
+                        now >= n.t + n.vd
+                    ) {
+                        n.ended = true;
+                    }
+
+
+                    if (!n.ended) {
+
+                        const p =
+                            (
+                                now - n.t
+                            ) /
+                            n.vd;
+
+
+                        Yh =
+                            n.Y0 +
+                            p * n.dy;
+
+                        Zh =
+                            n.Z0 +
+                            p * n.dz;
+
+
+                        hcol =
+                            [0, 1, 2].map(i => {
+                                return (
+                                    n.c0[i] +
+                                    (
+                                        n.c1[i] -
+                                        n.c0[i]
+                                    ) * p
+                                );
+                            });
+                    }
+
+
+                    if (
+                        !n.shown &&
+                        now >= n.t + n.vd / 2
+                    ) {
+
+                        n.shown = true;
+
+                        showTheory(n);
+                    }
+                }
+
+
+                // -------------------------------------------------
+                // POSISI GARIS
+                // -------------------------------------------------
+
+                let k = 0;
+
+
+                // Titik awal: ikut ketinggian ruas pertama
+                // yang masih ada, supaya tidak ada kemiringan
+                // palsu saat ruas lama dihapus.
+
+                const first =
+                    notes.find(
+                        n => n.started
+                    );
+
+
+                let px =
+                    xs(T0);
+
+                let py =
+                    first
+                        ? first.Y0 - Yh
+                        : -Yh;
+
+                let pz =
+                    first
+                        ? first.Z0 - Zh
+                        : -Zh;
+
+
+                const BP = [
+                    -L / 2,
+                    -L / 2 + FW
+                ];
+
+
+                // -------------------------------------------------
+                // TAMBAH TITIK
+                // -------------------------------------------------
+
+                const put = (
+                    x,
+                    y,
+                    z,
+                    c,
+                    f
+                ) => {
+
+                    pos[k * 3] = x;
+                    pos[k * 3 + 1] = y;
+                    pos[k * 3 + 2] = z;
+
+
+                    col[k * 3] =
+                        c[0] * f;
+
+                    col[k * 3 + 1] =
+                        c[1] * f;
+
+                    col[k * 3 + 2] =
+                        c[2] * f;
+
+
+                    k++;
+                };
+
+
+                // -------------------------------------------------
+                // BUAT RUAS GARIS
+                // -------------------------------------------------
+
+                const seg = (
+                    x,
+                    y,
+                    z,
+                    c0,
+                    c1
+                ) => {
+
+                    let sx = px;
+                    let sy = py;
+                    let sz = pz;
+
+                    let sc = c0;
+
+
+                    const pcs = [];
+
+
+                    for (const b of BP) {
+
+                        if (
+                            px < b &&
+                            b < x
+                        ) {
+
+                            const u =
+                                (b - px) /
+                                (x - px);
+
+
+                            pcs.push([
+                                b,
+
+                                py +
+                                (y - py) * u,
+
+                                pz +
+                                (z - pz) * u,
+
+                                c0.map(
+                                    (v, i) => {
+                                        return (
+                                            v +
+                                            (
+                                                c1[i] -
+                                                v
+                                            ) * u
+                                        );
+                                    }
+                                )
+                            ]);
+                        }
+                    }
+
+
+                    pcs.push([
+                        x,
+                        y,
+                        z,
+                        c1
+                    ]);
+
+
+                    for (const q of pcs) {
+
+                        if (
+                            k + 2 >
+                            MAXV
+                        ) {
+                            break;
+                        }
+
+
+                        put(
+                            sx,
+                            sy,
+                            sz,
+                            sc,
+                            fd(sx)
+                        );
+
+
+                        put(
+                            q[0],
+                            q[1],
+                            q[2],
+                            q[3],
+                            fd(q[0])
+                        );
+
+
+                        sx = q[0];
+                        sy = q[1];
+                        sz = q[2];
+                        sc = q[3];
+                    }
+
+
+                    px = x;
+                    py = y;
+                    pz = z;
+                };
+
+
+                // -------------------------------------------------
+                // RENDER SETIAP KICAU
+                // -------------------------------------------------
+
+                for (const n of notes) {
+
+                    if (!n.started) {
+                        continue;
+                    }
+
+
+                    const p =
+                        clamp(
+                            (now - n.t) /
+                            n.vd,
+                            0,
+                            1
+                        );
+
+
+                    const x0 =
+                        xs(n.X0);
+
+
+                    const x1 =
+                        xs(
+                            n.X0 +
+                            p * n.vd
+                        );
+
+
+                    const cb =
+                        [0, 1, 2].map(i => {
+
+                            return (
+                                n.c0[i] +
+                                (
+                                    n.c1[i] -
+                                    n.c0[i]
+                                ) * p
+                            );
+                        });
+
+
+                    seg(
+                        x0,
+                        n.Y0 - Yh,
+                        n.Z0 - Zh,
+                        G,
+                        G
+                    );
+
+
+                    seg(
+                        x1,
+                        n.Y0 +
+                            p * n.dy -
+                            Yh,
+
+                        n.Z0 +
+                            p * n.dz -
+                            Zh,
+
+                        n.c0,
+                        cb
+                    );
+                }
+
+
+                // -------------------------------------------------
+                // GARIS DEPAN
+                // -------------------------------------------------
+
+                seg(
+                    L / 2,
+                    0,
+                    0,
+                    G,
+                    G
+                );
+
+
+                // -------------------------------------------------
+                // UPDATE GEOMETRY
+                // -------------------------------------------------
+
+                geo.setDrawRange(
+                    0,
+                    k
+                );
+
+
+                geo.attributes.position.needsUpdate =
+                    true;
+
+                geo.attributes.color.needsUpdate =
+                    true;
+
+
+                // -------------------------------------------------
+                // HAPUS RUAS YANG SUDAH LEWAT
+                // -------------------------------------------------
+
+                notes = notes.filter(n => {
+
+                    return !(
+                        n.ended &&
+                        xs(
+                            n.X0 + n.vd
+                        ) <
+                        -L / 2 - 1
+                    );
+                });
+
+
+                // -------------------------------------------------
+                // UPDATE LABEL
+                // -------------------------------------------------
+
+                grp.updateMatrixWorld();
+
+
+                const w =
+                    box.clientWidth;
+
+                const h =
+                    box.clientHeight;
+
+
+                labels = labels.filter(l => {
+
+                    const n = l.n;
+
+
+                    if (!notes.includes(n)) {
+
+                        l.d.remove();
+
+                        return false;
+                    }
+
+
+                    const x =
+                        xs(
+                            n.X0 +
+                            n.vd / 2
+                        );
+
+
+                    vv.set(
+                        x,
+
+                        n.Y0 +
+                            n.dy / 2 -
+                            Yh +
+                            0.3,
+
+                        n.Z0 +
+                            n.dz / 2 -
+                            Zh
+                    );
+
+
+                    vv
+                        .applyMatrix4(
+                            grp.matrixWorld
+                        )
+                        .project(cam);
+
+
+                    l.d.style.left =
+                        (
+                            (
+                                vv.x * 0.5
+                            ) +
+                            0.5
+                        ) *
+                        w +
+                        'px';
+
+
+                    l.d.style.top =
+                        (
+                            (
+                                -vv.y * 0.5
+                            ) +
+                            0.5
+                        ) *
+                        h +
+                        'px';
+
+
+                    l.d.style.opacity =
+                        fd(x);
+
+
+                    return true;
+                });
+            }
+
+
+            renderer.render(
+                scene,
+                cam
+            );
+
+
+            requestAnimationFrame(
+                frame
+            );
+        }
+
+
+        requestAnimationFrame(
+            frame
+        );
+    </script>
+
 </body>
+
 </html>
