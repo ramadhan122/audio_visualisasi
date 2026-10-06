@@ -1,0 +1,16 @@
+# Audio
+audio/*.mp3
+audio/*.wav
+audio/*.ogg
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Temporary
+*.tmp
+*.log
